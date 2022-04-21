@@ -11,41 +11,39 @@ import java.util.List;
 @RequestMapping("parking_lot")
 public class ParkingLotController implements CRUDController<ParkingLotDto> {
 
-    ParkingLotService service;
+    ParkingLotService parkingLotService;
 
     public ParkingLotController(ParkingLotService service) {
-        this.service = service;
+        this.parkingLotService = service;
     }
 
     @Override
     public void create(ParkingLotDto parkingLotDto) {
-        service.create(parkingLotDto.toParkingLot());
+        parkingLotService.create(parkingLotDto.toParkingLot());
     }
 
     @Override
     public void updateWithPUT(ParkingLotDto parkingLotDto) {
-        service.updateWithPUT(parkingLotDto.toParkingLot());
+        parkingLotService.updateWithPUT(parkingLotDto.toParkingLot());
     }
 
     @Override
     public void updateWithPATCH(ParkingLotDto parkingLotDto) {
-        service.updateWithPATCH(parkingLotDto.toParkingLot());
+        parkingLotService.updateWithPATCH(parkingLotDto.toParkingLot());
     }
 
     @Override
     public List<ParkingLotDto> getAll() {
-        return service.getAll().stream()
-                .map(ParkingLotDto::from)
-                .toList();
+        return ParkingLotDto.from(parkingLotService.getAll());
     }
 
     @Override
     public ParkingLotDto getById(Long id) {
-        return ParkingLotDto.from(service.getById(id));
+        return ParkingLotDto.from(parkingLotService.getById(id));
     }
 
     @Override
     public void remove(Long id) {
-        service.remove(id);
+        parkingLotService.remove(id);
     }
 }

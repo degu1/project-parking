@@ -1,6 +1,9 @@
 package se.iths.parking_lot.dtos;
 
 import se.iths.parking_lot.entities.ParkingSlot;
+import se.iths.parking_lot.entities.User;
+
+import java.util.List;
 
 public record ParkingSlotDto(Long id, String name, Boolean electricCharge) {
 
@@ -10,6 +13,11 @@ public record ParkingSlotDto(Long id, String name, Boolean electricCharge) {
 
     public ParkingSlot toParkingLot() {
         return ParkingSlot.from(this);
+    }
+
+    public static List<ParkingSlotDto> from(List<ParkingSlot> parkingSlots) {
+        return parkingSlots.stream()
+                .map(ParkingSlotDto::from).toList();
     }
 
     public ParkingSlotDto(Long id, String name, Boolean electricCharge) {
