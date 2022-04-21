@@ -3,19 +3,17 @@ package se.iths.parking_lot.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.iths.parking_lot.dtos.ParkingLotDto;
-import se.iths.parking_lot.services.ParkingLotCRUDService;
+import se.iths.parking_lot.services.ParkingLotService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("parking_lot")
-
-
 public class ParkingLotController implements CRUDController<ParkingLotDto> {
 
-    ParkingLotCRUDService service;
+    ParkingLotService service;
 
-    public ParkingLotController(ParkingLotCRUDService service) {
+    public ParkingLotController(ParkingLotService service) {
         this.service = service;
     }
 

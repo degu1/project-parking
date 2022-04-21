@@ -2,17 +2,17 @@ package se.iths.parking_lot.services;
 
 import org.springframework.stereotype.Service;
 import se.iths.parking_lot.entities.ParkingLot;
-import se.iths.parking_lot.repositories.ExtendedCrudRepository;
+import se.iths.parking_lot.repositories.ParkingLotRepository;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Service
-public class ParkingLotCRUDService implements CRUDService<ParkingLot> {
+public class ParkingLotService implements CRUDService<ParkingLot> {
 
-    private final ExtendedCrudRepository parkingLotRepository;
+    private final ParkingLotRepository parkingLotRepository;
 
-    public ParkingLotCRUDService(ExtendedCrudRepository parkingLotRepository) {
+    public ParkingLotService(ParkingLotRepository parkingLotRepository) {
         this.parkingLotRepository = parkingLotRepository;
     }
 
