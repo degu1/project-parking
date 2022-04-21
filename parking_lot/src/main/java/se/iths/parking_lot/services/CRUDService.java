@@ -3,7 +3,7 @@ package se.iths.parking_lot.services;
 
 import java.util.List;
 
-public interface ServiceInterface<T> {
+public interface CRUDService<T> {
     void create(T t);
 
     void updateWithPUT(T t);
