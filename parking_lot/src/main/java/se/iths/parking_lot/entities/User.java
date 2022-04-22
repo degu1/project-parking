@@ -1,9 +1,13 @@
 package se.iths.parking_lot.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import se.iths.parking_lot.dtos.UserDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -17,6 +21,12 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<QueueSlot> queueSlots = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ParkingSlot> parkingSlots = new ArrayList<>();
+
     public User() {
     }
 
@@ -26,7 +36,7 @@ public class User {
         this.email = email;
     }
 
-    public static User from(UserDto userDto) {
+    public static User fromDto(UserDto userDto) {
         return new User(userDto.id(), userDto.name(), userDto.email());
     }
 
@@ -52,5 +62,41 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    @JsonIgnore
+    public List<QueueSlot> getQueueSlots() {
+        return queueSlots;
+    }
+
+    public void setQueueSlots(List<QueueSlot> queueSlots) {
+        this.queueSlots = queueSlots;
+    }
+
+    public void removeQueueSlot(QueueSlot queueSlot) {
+        this.getQueueSlots().remove(queueSlot);
+    }
+
+    public List<ParkingSlot> getParkingSlots() {
+        return parkingSlots;
+    }
+
+    @JsonIgnore
+    public void setParkingSlots(List<ParkingSlot> parkingSlots) {
+        this.parkingSlots = parkingSlots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(queueSlots, user.queueSlots);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, queueSlots);
     }
 }

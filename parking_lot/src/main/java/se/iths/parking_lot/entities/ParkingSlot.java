@@ -1,8 +1,10 @@
 package se.iths.parking_lot.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import se.iths.parking_lot.dtos.ParkingSlotDto;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class ParkingSlot {
@@ -15,6 +17,13 @@ public class ParkingSlot {
     private String name;
     private Boolean electricCharge;
 
+    @ManyToOne
+    @NotNull
+    private ParkingLot parkingLot;
+
+    @ManyToOne
+    private User user;
+
     public ParkingSlot() {
     }
 
@@ -26,6 +35,15 @@ public class ParkingSlot {
 
     public static ParkingSlot from(ParkingSlotDto parkingSlotDto) {
         return new ParkingSlot(parkingSlotDto.id(), parkingSlotDto.name(), parkingSlotDto.electricCharge());
+    }
+
+    @JsonIgnore
+    public ParkingLot getParkingLot() {
+        return parkingLot;
+    }
+
+    public void setParkingLot(ParkingLot parkingLot) {
+        this.parkingLot = parkingLot;
     }
 
     public Long getId() {
@@ -50,5 +68,17 @@ public class ParkingSlot {
 
     public void setElectricCharge(Boolean electricCharge) {
         this.electricCharge = electricCharge;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void removeUser() {
+        this.user = null;
     }
 }

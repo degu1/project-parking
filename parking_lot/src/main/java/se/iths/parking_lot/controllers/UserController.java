@@ -1,5 +1,7 @@
 package se.iths.parking_lot.controllers;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.iths.parking_lot.dtos.UserDto;
@@ -45,5 +47,15 @@ public class UserController implements CRUDController<UserDto> {
     @Override
     public void remove(Long id) {
         userService.remove(id);
+    }
+
+    @PutMapping("{userId}/subscribe")
+    public void queueToParkingLot(@PathVariable("userId") Long userId, Long parkingLotId, Boolean electricCharge) {
+        userService.queryToParkingLot(userId,parkingLotId, electricCharge);
+    }
+
+    @PutMapping("{userId}/unsubscribe")
+    public void removeFromParkingLot(@PathVariable("userId") Long userId, Long queueSlotId) {
+        userService.removeFromParkingLot(userId,queueSlotId);
     }
 }

@@ -5,10 +5,13 @@ import se.iths.parking_lot.entities.User;
 
 import java.util.List;
 
-public record ParkingSlotDto(Long id, String name, Boolean electricCharge) {
+public record ParkingSlotDto(Long id, String name, Boolean electricCharge, UserDto user) {
 
     public static ParkingSlotDto from(ParkingSlot parkingSlot) {
-        return new ParkingSlotDto(parkingSlot.getId(), parkingSlot.getName(), parkingSlot.getElectricCharge());
+        if(parkingSlot.getUser() != null) {
+            return new ParkingSlotDto(parkingSlot.getId(), parkingSlot.getName(), parkingSlot.getElectricCharge(), UserDto.from(parkingSlot.getUser()));
+        }
+        return new ParkingSlotDto(parkingSlot.getId(), parkingSlot.getName(), parkingSlot.getElectricCharge(), null);
     }
 
     public ParkingSlot toParkingLot() {
@@ -20,9 +23,10 @@ public record ParkingSlotDto(Long id, String name, Boolean electricCharge) {
                 .map(ParkingSlotDto::from).toList();
     }
 
-    public ParkingSlotDto(Long id, String name, Boolean electricCharge) {
+    public ParkingSlotDto(Long id, String name, Boolean electricCharge, UserDto user) {
         this.id = id;
         this.name = name;
+        this.user = user;
         if(electricCharge == null){
             this.electricCharge = false;
         } else {

@@ -1,5 +1,7 @@
 package se.iths.parking_lot.controllers;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.iths.parking_lot.dtos.ParkingLotDto;
@@ -8,7 +10,7 @@ import se.iths.parking_lot.services.ParkingLotService;
 import java.util.List;
 
 @RestController
-@RequestMapping("parking_lot")
+@RequestMapping("parking_lots")
 public class ParkingLotController implements CRUDController<ParkingLotDto> {
 
     ParkingLotService parkingLotService;
@@ -45,5 +47,10 @@ public class ParkingLotController implements CRUDController<ParkingLotDto> {
     @Override
     public void remove(Long id) {
         parkingLotService.remove(id);
+    }
+
+    @PutMapping("remove_parking_slot")
+    public void removeParkingSlot(Long parkingLotId, Long parkingSlotId) {
+        parkingLotService.removeParkingSlot(parkingLotId,parkingSlotId);
     }
 }
