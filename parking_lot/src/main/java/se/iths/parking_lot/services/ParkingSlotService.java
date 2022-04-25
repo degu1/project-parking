@@ -36,6 +36,16 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
         ParkingLot foundParkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(); //TODO
         parkingSlot.setParkingLot(foundParkingLot);
         parkingSlotRepository.save(parkingSlot);
+
+        Queue queue = parkingSlot.getParkingLot().getQueue();
+
+        try {
+            QueueSlot queueSlot = queue.getFirstSlot(parkingSlot.getElectricCharge());
+            parkingSlot.setUser(queueSlot.getUser());
+            queueSlotRepository.delete(queueSlot);
+        } catch (Exception e) {
+            System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");
+        }
     }
 
     @Override
