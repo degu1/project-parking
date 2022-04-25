@@ -27,6 +27,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ParkingSlot> parkingSlots = new ArrayList<>();
 
+    @ManyToMany
+    @NotEmpty
+    private List<Role> roles = new ArrayList<>();
+
     public User() {
     }
 
@@ -34,6 +38,18 @@ public class User {
         this.id = id;
         this.name = name;
         this.email = email;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public static User fromDto(UserDto userDto) {
