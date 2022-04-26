@@ -8,6 +8,8 @@ import se.iths.parking_lot.services.RoleService;
 
 import java.util.List;
 
+import static se.iths.parking_lot.EntityMapper.roleToDto;
+
 @RestController
 @RequestMapping("role")
 public class RoleController {
@@ -20,6 +22,6 @@ public class RoleController {
 
     @GetMapping("/all")
     public List<RoleDto> getAll() {
-        return RoleDto.from(roleService.getAll());
+        return roleToDto(roleService.getAll());
     }
 }

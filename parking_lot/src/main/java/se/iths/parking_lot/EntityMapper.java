@@ -3,8 +3,10 @@ package se.iths.parking_lot;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.iths.parking_lot.dtos.ParkingLotDto;
 import se.iths.parking_lot.dtos.ParkingSlotDto;
+import se.iths.parking_lot.dtos.RoleDto;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
+import se.iths.parking_lot.entities.Role;
 
 import java.util.List;
 
@@ -32,4 +34,15 @@ public class EntityMapper {
                 .map(EntityMapper::parkingSlotToDto)
                 .toList();
     }
+
+    public static RoleDto roleToDto(Role role) {
+        return objectMapper.convertValue(role, RoleDto.class);
+    }
+
+    public static List<RoleDto> roleToDto(List<Role> roles) {
+        return roles.stream()
+                .map(EntityMapper::roleToDto)
+                .toList();
+    }
+
 }
