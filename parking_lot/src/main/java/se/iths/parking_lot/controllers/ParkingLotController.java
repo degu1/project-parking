@@ -1,51 +1,51 @@
 package se.iths.parking_lot.controllers;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.iths.parking_lot.dtos.ParkingLotDto;
+import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.services.ParkingLotService;
 
 import java.util.List;
 
+import static se.iths.parking_lot.EntityMapper.parkingLotToDto;
+
 @RestController
 @RequestMapping("parking_lots")
-public class ParkingLotController implements CRUDController<ParkingLotDto> {
+public class ParkingLotController {
 
-    ParkingLotService parkingLotService;
+    private final ParkingLotService parkingLotService;
 
     public ParkingLotController(ParkingLotService service) {
         this.parkingLotService = service;
     }
 
-    @Override
-    public void create(ParkingLotDto parkingLotDto) {
-        parkingLotService.create(parkingLotDto.toParkingLot());
+    @PostMapping
+    public void create(@RequestBody ParkingLot parkingLot) {
+        parkingLotService.create(parkingLot);
     }
 
-    @Override
-    public void updateWithPUT(ParkingLotDto parkingLotDto) {
-        parkingLotService.updateWithPUT(parkingLotDto.toParkingLot());
+    @PutMapping
+    public void updateWithPUT(@RequestBody ParkingLot parkingLot) {
+        parkingLotService.updateWithPUT(parkingLot);
     }
 
-    @Override
-    public void updateWithPATCH(ParkingLotDto parkingLotDto) {
-        parkingLotService.updateWithPATCH(parkingLotDto.toParkingLot());
+    @PatchMapping
+    public void updateWithPATCH(@RequestBody ParkingLot parkingLot) {
+        parkingLotService.updateWithPATCH(parkingLot);
     }
 
-    @Override
+    @GetMapping
     public List<ParkingLotDto> getAll() {
-        return ParkingLotDto.from(parkingLotService.getAll());
+        return parkingLotToDto(parkingLotService.getAll());
     }
 
-    @Override
-    public ParkingLotDto getById(Long id) {
-        return ParkingLotDto.from(parkingLotService.getById(id));
+    @GetMapping("{id}")
+    public ParkingLotDto getById(@PathVariable("id")Long id) {
+        return parkingLotToDto(parkingLotService.getById(id));
     }
 
-    @Override
-    public void remove(Long id) {
+    @DeleteMapping("{id}")
+    public void remove(@PathVariable Long id) {
         parkingLotService.remove(id);
     }
 
@@ -53,4 +53,5 @@ public class ParkingLotController implements CRUDController<ParkingLotDto> {
     public void removeParkingSlot(Long parkingLotId, Long parkingSlotId) {
         parkingLotService.removeParkingSlot(parkingLotId,parkingSlotId);
     }
+
 }

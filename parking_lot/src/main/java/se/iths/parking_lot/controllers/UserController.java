@@ -1,17 +1,17 @@
 package se.iths.parking_lot.controllers;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.iths.parking_lot.dtos.UserDto;
+import se.iths.parking_lot.entities.User;
 import se.iths.parking_lot.services.UserService;
 
 import java.util.List;
 
+import static se.iths.parking_lot.EntityMapper.userToDto;
+
 @RestController
 @RequestMapping("users")
-public class UserController implements CRUDController<UserDto> {
+public class UserController {
 
     private final UserService userService;
 
@@ -19,32 +19,32 @@ public class UserController implements CRUDController<UserDto> {
         this.userService = userService;
     }
 
-    @Override
-    public void create(UserDto userDto) {
-        userService.create(userDto.toUser());
+    @PostMapping
+    public void create(@RequestBody User user) {
+        userService.create(user);
     }
 
-    @Override
-    public void updateWithPUT(UserDto userDto) {
-        userService.updateWithPUT(userDto.toUser());
+    @PutMapping
+    public void updateWithPUT(@RequestBody User user) {
+        userService.updateWithPUT(user);
     }
 
-    @Override
-    public void updateWithPATCH(UserDto userDto) {
-        userService.updateWithPATCH(userDto.toUser());
+    @PatchMapping
+    public void updateWithPATCH(@RequestBody User user) {
+        userService.updateWithPATCH(user);
     }
 
-    @Override
+    @GetMapping
     public List<UserDto> getAll() {
-        return UserDto.from(userService.getAll());
+        return userToDto(userService.getAll());
     }
 
-    @Override
-    public UserDto getById(Long id) {
-        return UserDto.from(userService.getById(id));
+    @GetMapping("{id}")
+    public UserDto getById(@PathVariable("id") Long id) {
+        return userToDto(userService.getById(id));
     }
 
-    @Override
+    @DeleteMapping
     public void remove(Long id) {
         userService.remove(id);
     }
