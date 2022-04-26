@@ -23,4 +23,13 @@ public class EntityMapper {
                 .toList();
     }
 
+    public static ParkingSlotDto parkingSlotToDto(ParkingSlot parkingSlot) {
+        return objectMapper.convertValue(parkingSlot, ParkingSlotDto.class);
+    }
+
+    public static List<ParkingSlotDto> parkingSlotToDto(List<ParkingSlot> parkingSlot) {
+        return parkingSlot.stream()
+                .map(EntityMapper::parkingSlotToDto)
+                .toList();
+    }
 }
