@@ -26,14 +26,6 @@ public class ParkingLot {
     @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Queue queue;
 
-    public ParkingLot() {
-    }
-
-    public ParkingLot(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public void removeParkingSlot(ParkingSlot parkingSlot) {
         parkingSlots.remove(parkingSlot);
     }
