@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Parking slots</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1 th:text="${parkingLotName}"></h1>
+<ul>
+    <th:block th:each="parkingSlot: ${parkingSlots}">
+        <li>
+            <p th:text="${parkingSlot.name}"></p>
+            <p th:text="${parkingSlot.electricCharge}  ? 'Charge':'No charge'"></p>
+            <p th:text="${parkingSlot.user} ?: 'No user'"></p>
+            <a th:href="@{/tl_parking_lots/{lotId}/slots/{slotId}/remove (lotId=${parkingLot.getId()}, slotId=${parkingSlot.getId()})}">REMOVE
+                USER</a>
+            <a th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/edit (slotId=${parkingSlot.getId()}, lotId=${parkingLot.getId()})}">EDIT
+                SLOT</a>
+            <a th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/delete (slotId=${parkingSlot.getId()}, lotId=${parkingLot.getId()})}">REMOVE
+                SLOT</a>
+        </li>
+    </th:block>
+</ul>
+<a th:href="@{/tl_parking_lots}">Tillbaka</a>
+<a th:href="@{/tl_parking_lots/{lotId}/slots/add (lotId=${parkingLot.getId()})}">New slot</a>
+</body>
+</html>

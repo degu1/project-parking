@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1 th:text="${parkingSlot.getName()}"></h1>
+<form method="post" th:action="@{/tl_parking_lots/{lotId}/slot/edit (lotId=${lotId})}" th:object="${parkingSlot}">
+    <table>
+        <tr>
+            <td>Name</td>
+            <td><input name="id" readonly
+                       th:field="*{id}" type="text"/></td>
+            <td><input name="name" th:field="*{name}"
+                       type="text"/></td>
+        </tr>
+    </table>
+    <input type="submit" value="Update"/>
+</form>
+</body>
+</html>

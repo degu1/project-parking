@@ -4,9 +4,7 @@ import se.iths.parking_lot.dtos.ParkingLotDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class ParkingLot {
@@ -18,7 +16,7 @@ public class ParkingLot {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "parkingLot",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "parkingLot", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ParkingSlot> parkingSlots = new ArrayList<>();
 
     @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST)

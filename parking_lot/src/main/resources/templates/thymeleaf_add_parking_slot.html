@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add parking slot</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<form method="post" th:action="@{/tl_parking_lots/{lotId}/slots/add (lotId=${lotId})}" th:object="${parkingSlot}">
+    <table>
+        <tr>
+            <td>Name</td>
+            <td><input name="name" th:field="*{name}"
+                       type="text"/></td>
+        </tr>
+        <tr>
+            <td>Electric charge</td>
+            <td><input th:field="*{electricCharge}" type="checkbox"
+            /></td>
+        </tr>
+    </table>
+    <input type="submit" value="Update"/>
+</form>
+</body>
+</html>
