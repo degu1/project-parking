@@ -19,6 +19,7 @@
 
     <modules>
         <module>parking_lot</module>
+        <module>message_receiver</module>
     </modules>
 
     <dependencies>
@@ -42,5 +43,14 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
