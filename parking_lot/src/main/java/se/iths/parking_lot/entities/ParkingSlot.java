@@ -6,10 +6,11 @@ import se.iths.parking_lot.dtos.ParkingSlotDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Data
-public class ParkingSlot {
+public class ParkingSlot implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

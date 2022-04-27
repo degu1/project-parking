@@ -4,6 +4,7 @@ import lombok.Data;
 import se.iths.parking_lot.dtos.ParkingLotDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class ParkingLot {
+public class ParkingLot implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
