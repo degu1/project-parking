@@ -105,7 +105,6 @@ public class ThymeleafController {
     @GetMapping("{lotId}/slot/{slotId}/delete")
     public String deleteSlot(@PathVariable("lotId") Long lotId, @PathVariable("slotId") Long slotId) {
         parkingSlotService.remove(slotId);
-        System.out.println("APA " + slotId);
         return "redirect:/tl_parking_lots/{lotId}";
     }
 }

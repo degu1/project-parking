@@ -10,11 +10,12 @@
 <form method="post" th:action="@{/tl_parking_lots/{lotId}/slot/edit (lotId=${lotId})}" th:object="${parkingSlot}">
     <table>
         <tr>
-            <td>Name</td>
-            <td><input name="id" readonly
-                       th:field="*{id}" type="text"/></td>
-            <td><input name="name" th:field="*{name}"
-                       type="text"/></td>
+            <td hidden>Id<input name="id" readonly
+                                th:field="*{id}" type="text"/></td>
+            <td>Name<input name="name" th:field="*{name}"
+                           type="text"/></td>
+            <td>Electric charge<input name="electricCharge" th:field="*{electricCharge}"
+                                      type="checkbox"/></td>
         </tr>
     </table>
     <input type="submit" value="Update"/>
