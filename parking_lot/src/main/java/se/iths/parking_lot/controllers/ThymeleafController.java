@@ -3,10 +3,15 @@ package se.iths.parking_lot.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import se.iths.parking_lot.dtos.ParkingLotDto;
+import se.iths.parking_lot.dtos.ParkingSlotDto;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.services.ParkingLotService;
 import se.iths.parking_lot.services.ParkingSlotService;
+
+import static se.iths.parking_lot.EntityMapper.parkingLotToDto;
+import static se.iths.parking_lot.EntityMapper.parkingSlotToDto;
 
 @Controller
 @RequestMapping("tl_parking_lots")
@@ -23,7 +28,7 @@ public class ThymeleafController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("parkingLots", parkingLotService.getAll());
-        return "thymeleaf_parking_lot";
+        return "thymeleaf_parking_lots";
     }
 
     @GetMapping("add")
@@ -47,7 +52,8 @@ public class ThymeleafController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("parkingLot", parkingLotService.getById(id));
+        ParkingLotDto parkingLotDto = parkingLotToDto(parkingLotService.getById(id));
+        model.addAttribute("parkingLot", parkingLotDto);
         return "thymeleaf_edit_parking_lot";
     }
 
@@ -60,10 +66,10 @@ public class ThymeleafController {
 
     @GetMapping("/{id}")
     public String slots(@PathVariable("id") Long id, Model model) {
-        ParkingLot parkingLot = parkingLotService.getById(id);
-        model.addAttribute("parkingLot", parkingLot);
-        model.addAttribute("parkingLotName", parkingLot.getName());
-        model.addAttribute("parkingSlots", parkingLot.getParkingSlots());
+        ParkingLotDto parkingLotDto = parkingLotToDto(parkingLotService.getById(id));
+        model.addAttribute("parkingLot", parkingLotDto);
+        model.addAttribute("parkingLotName", parkingLotDto.name());
+        model.addAttribute("parkingSlots", parkingLotDto.parkingSlots());
         return "thymeleaf_parking_slots";
     }
 
@@ -75,8 +81,8 @@ public class ThymeleafController {
 
     @GetMapping("/{lotId}/slot/{id}/edit")
     public String editParkingSlot(@PathVariable("id") Long id, @PathVariable("lotId") Long lotId, Model model) {
-        ParkingSlot parkingSlot = parkingSlotService.getById(id);
-        model.addAttribute("parkingSlot", parkingSlot);
+        ParkingSlotDto parkingSlotDto = parkingSlotToDto(parkingSlotService.getById(id));
+        model.addAttribute("parkingSlot", parkingSlotDto);
         model.addAttribute("lotId", lotId);
         return "thymeleaf_edit_parking_slot";
     }

@@ -44,14 +44,14 @@ public class UserController {
         return userToDto(userService.getById(id));
     }
 
-    @DeleteMapping
-    public void remove(Long id) {
+    @DeleteMapping("{id}")
+    public void remove(@PathVariable("id") Long id) {
         userService.remove(id);
     }
 
     @PutMapping("{userId}/subscribe")
     public void queueToParkingLot(@PathVariable("userId") Long userId, Long parkingLotId, Boolean electricCharge) {
-        userService.queryToParkingLot(userId,parkingLotId, electricCharge);
+        userService.queryToParkingLot(userId, parkingLotId, electricCharge);
     }
 
     @PutMapping("{userId}/unsubscribe")

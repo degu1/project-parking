@@ -66,6 +66,8 @@ public class UserService implements CRUDService<User> {
 
     @Override
     public void remove(Long id) {
+        User user = userRepository.findById(id).orElseThrow();//TODO
+        user.getParkingSlots().forEach(ParkingSlot::removeUser);
         userRepository.deleteById(id);
     }
 

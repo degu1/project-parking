@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="${parkingLot.getName()}"></h1>
+<h1 th:text="${parkingLot.name()}"></h1>
 <form method="post" th:action="@{/tl_parking_lots/edit}" th:object="${parkingLot}">
     <table>
         <tr>

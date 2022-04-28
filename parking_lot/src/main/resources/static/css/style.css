@@ -2,3 +2,15 @@ h1 {
     font-size: 40px;
     color: chartreuse;
 }
+
+.list {
+    border-style: dashed;
+    border-width: 2px;
+    border: black;
+
+
+}
+
+.list_objects {
+    padding: 0.5em;
+}
