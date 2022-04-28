@@ -12,6 +12,8 @@ import java.io.Serializable;
 @Data
 public class ParkingSlot implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -30,5 +32,14 @@ public class ParkingSlot implements Serializable {
 
     public void removeUser() {
         this.user = null;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingSlot{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", electricCharge=" + electricCharge +
+                '}';
     }
 }

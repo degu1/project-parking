@@ -19,4 +19,12 @@
         <java.version>17</java.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>se.iths</groupId>
+            <artifactId>parking_lot</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>
