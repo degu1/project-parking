@@ -30,4 +30,15 @@ public class ParkingSlot {
     public void removeUser() {
         this.user = null;
     }
+
+    @Override
+    public String toString() {
+        return "ParkingSlot{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", electricCharge=" + electricCharge +
+                ", parkingLot=" + parkingLot +
+                ", user=" + user +
+                '}';
+    }
 }

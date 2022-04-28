@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>Parking Lots</h1>
+<ul>
+    <th:block th:each="parkingLot: ${parkingLots}">
+        <li>
+            <a th:href="@{/tl_parking_lots/{id}(id=${parkingLot.getId()})}" th:text="${parkingLot.name}"></a>
+            <a th:href="@{/tl_parking_lots/delete/{id}(id=${parkingLot.getId()})}">DELETE</a>
+            <a th:href="@{/tl_parking_lots/edit/{id}(id=${parkingLot.getId()})}">EDIT</a>
+        </li>
+    </th:block>
+</ul>
+<a th:href="@{/tl_parking_lots/add}">Add new parking lot</a>
+</body>
+</html>
