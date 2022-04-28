@@ -8,6 +8,7 @@ import se.iths.parking_lot.entities.QueueSlot;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.ParkingSlotRepository;
 import se.iths.parking_lot.repositories.QueueSlotRepository;
+import se.iths.parking_lot.utils.MessageSender;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -20,11 +21,13 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
     private final ParkingSlotRepository parkingSlotRepository;
     private final ParkingLotRepository parkingLotRepository;
     private final QueueSlotRepository queueSlotRepository;
+    private final MessageSender messageSender;
 
-    public ParkingSlotService(ParkingSlotRepository parkingSlotRepository, ParkingLotRepository parkingLotRepository, QueueSlotRepository queueSlotRepository) {
+    public ParkingSlotService(ParkingSlotRepository parkingSlotRepository, ParkingLotRepository parkingLotRepository, QueueSlotRepository queueSlotRepository, MessageSender messageSender) {
         this.parkingSlotRepository = parkingSlotRepository;
         this.parkingLotRepository = parkingLotRepository;
         this.queueSlotRepository = queueSlotRepository;
+        this.messageSender = messageSender;
     }
 
     @Override
@@ -79,6 +82,8 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
 
     @Override
     public void remove(Long id) {
+        ParkingSlot parkingSlot = parkingSlotRepository.findById(id).orElseThrow();
+        parkingSlot.getParkingLot().removeParkingSlot(parkingSlot);
         parkingSlotRepository.deleteById(id);
     }
 
@@ -91,6 +96,9 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
             QueueSlot queueSlot = queue.getFirstSlot(parkingSlot.getElectricCharge());
             parkingSlot.setUser(queueSlot.getUser());
             queueSlotRepository.delete(queueSlot);
+
+            messageSender.sendQueueUpdateMessage(queueSlot);
+            messageSender.addedToParkingSlotMessage(parkingSlot);
         } catch (Exception e) {
             System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");
         }

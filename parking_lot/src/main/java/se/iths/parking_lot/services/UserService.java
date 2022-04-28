@@ -8,6 +8,7 @@ import se.iths.parking_lot.entities.User;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.QueueSlotRepository;
 import se.iths.parking_lot.repositories.UserRepository;
+import se.iths.parking_lot.utils.MessageSender;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -20,11 +21,13 @@ public class UserService implements CRUDService<User> {
     private final UserRepository userRepository;
     private final ParkingLotRepository parkingLotRepository;
     private final QueueSlotRepository queueSlotRepository;
+    private final MessageSender messageSender;
 
-    public UserService(UserRepository userRepository, ParkingLotRepository parkingLotRepository, QueueSlotRepository queueSlotRepository) {
+    public UserService(UserRepository userRepository, ParkingLotRepository parkingLotRepository, QueueSlotRepository queueSlotRepository, MessageSender messageSender) {
         this.userRepository = userRepository;
         this.parkingLotRepository = parkingLotRepository;
         this.queueSlotRepository = queueSlotRepository;
+        this.messageSender = messageSender;
     }
 
     @Override
@@ -79,9 +82,10 @@ public class UserService implements CRUDService<User> {
             if(isFirstInQueue){
                 parkingSlot.setUser(user);
                 queueSlotRepository.delete(queueSlot);
+                messageSender.addedToParkingSlotMessage(parkingSlot);
             }
         } catch (Exception e) {
-            System.out.println("First in QUEUE!");
+            messageSender.addedToQueueMessage(queueSlot);
         }
     }
 

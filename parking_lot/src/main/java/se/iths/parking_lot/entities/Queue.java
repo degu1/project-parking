@@ -3,12 +3,13 @@ package se.iths.parking_lot.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
-public class Queue {
+public class Queue implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

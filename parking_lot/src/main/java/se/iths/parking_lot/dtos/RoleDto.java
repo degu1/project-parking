@@ -7,6 +7,6 @@ import se.iths.parking_lot.entities.User;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record RoleDto(Type type, List<User> users) {
+public record RoleDto(Type type, List<UserDto> users) {
 
 }

@@ -6,10 +6,13 @@ import se.iths.parking_lot.dtos.ParkingSlotDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Data
-public class ParkingSlot {
+public class ParkingSlot implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -37,8 +40,6 @@ public class ParkingSlot {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", electricCharge=" + electricCharge +
-                ", parkingLot=" + parkingLot +
-                ", user=" + user +
                 '}';
     }
 }

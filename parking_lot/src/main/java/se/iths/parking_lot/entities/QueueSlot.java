@@ -5,10 +5,11 @@ import lombok.Data;
 import se.iths.parking_lot.dtos.QueueSlotDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
-public class QueueSlot {
+public class QueueSlot implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
