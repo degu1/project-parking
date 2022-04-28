@@ -1,22 +1,8 @@
 package se.iths.parking_lot.dtos;
 
-import se.iths.parking_lot.entities.QueueSlot;
-import se.iths.parking_lot.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.List;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record UserDto(Long id, String name, String email) {
 
-public record UserDto(Long id, String name, String email, List<QueueSlotDto> queueSlots) {
-
-    public static UserDto from(User user) {
-        return new UserDto(user.getId(), user.getName(), user.getEmail(),QueueSlotDto.from(user.getQueueSlots()));
-    }
-
-    public static List<UserDto> from(List<User> users) {
-        return users.stream()
-                .map(user -> UserDto.from(user)).toList();
-    }
-
-    public User toUser() {
-        return User.fromDto(this);
-    }
 }

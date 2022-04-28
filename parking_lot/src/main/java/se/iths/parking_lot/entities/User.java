@@ -1,6 +1,7 @@
 package se.iths.parking_lot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import se.iths.parking_lot.dtos.UserDto;
 
 import javax.persistence.*;
@@ -10,81 +11,38 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Data
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     @NotEmpty
     private String name;
+
     @NotEmpty
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<QueueSlot> queueSlots = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ParkingSlot> parkingSlots = new ArrayList<>();
 
-    public User() {
-    }
+    @NotEmpty
+    @ManyToMany
+    private List<Role> roles = new ArrayList<>();
 
-    public User(Long id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
-
-    public static User fromDto(UserDto userDto) {
-        return new User(userDto.id(), userDto.name(), userDto.email());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    @JsonIgnore
-    public List<QueueSlot> getQueueSlots() {
-        return queueSlots;
-    }
-
-    public void setQueueSlots(List<QueueSlot> queueSlots) {
-        this.queueSlots = queueSlots;
+    public void addRole(Role role) {
+        roles.add(role);
     }
 
     public void removeQueueSlot(QueueSlot queueSlot) {
         this.getQueueSlots().remove(queueSlot);
-    }
-
-    public List<ParkingSlot> getParkingSlots() {
-        return parkingSlots;
-    }
-
-    @JsonIgnore
-    public void setParkingSlots(List<ParkingSlot> parkingSlots) {
-        this.parkingSlots = parkingSlots;
     }
 
     @Override
