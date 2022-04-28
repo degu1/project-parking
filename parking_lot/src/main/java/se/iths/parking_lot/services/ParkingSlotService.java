@@ -82,6 +82,8 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
 
     @Override
     public void remove(Long id) {
+        ParkingSlot parkingSlot = parkingSlotRepository.findById(id).orElseThrow();
+        parkingSlot.getParkingLot().removeParkingSlot(parkingSlot);
         parkingSlotRepository.deleteById(id);
     }
 
