@@ -8,7 +8,7 @@ import se.iths.parking_lot.entities.QueueSlot;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.ParkingSlotRepository;
 import se.iths.parking_lot.repositories.QueueSlotRepository;
-import se.iths.parking_lot.utils.MessageSender;
+import se.iths.parking_lot.JMS.sender.MessageSender;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -94,11 +94,14 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
 
         try {
             QueueSlot queueSlot = queue.getFirstSlot(parkingSlot.getElectricCharge());
+
             parkingSlot.setUser(queueSlot.getUser());
+            queue.removeQueueSlot(queueSlot);
             queueSlotRepository.delete(queueSlot);
 
-            messageSender.sendQueueUpdateMessage(queueSlot);
             messageSender.addedToParkingSlotMessage(parkingSlot);
+            messageSender.sendQueueUpdateMessage(queue);
+
         } catch (Exception e) {
             System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");
         }

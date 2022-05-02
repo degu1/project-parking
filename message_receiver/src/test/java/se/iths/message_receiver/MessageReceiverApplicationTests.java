@@ -1,4 +1,4 @@
-package com.example.message_receiver;
+package se.iths.message_receiver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -2,7 +2,6 @@ package se.iths.parking_lot.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import se.iths.parking_lot.entities.Type;
-import se.iths.parking_lot.entities.User;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package se.iths.parking_lot;
+package se.iths.parking_lot.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.iths.parking_lot.dtos.ParkingLotDto;

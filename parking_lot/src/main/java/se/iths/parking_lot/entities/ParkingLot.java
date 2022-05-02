@@ -1,7 +1,6 @@
 package se.iths.parking_lot.entities;
 
 import lombok.Data;
-import se.iths.parking_lot.dtos.ParkingLotDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,7 +21,7 @@ public class ParkingLot implements Serializable {
     @OneToMany(mappedBy = "parkingLot", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ParkingSlot> parkingSlots = new ArrayList<>();
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     private Queue queue;
 
     public void removeParkingSlot(ParkingSlot parkingSlot) {

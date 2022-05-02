@@ -2,7 +2,6 @@ package se.iths.parking_lot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import se.iths.parking_lot.dtos.ParkingSlotDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

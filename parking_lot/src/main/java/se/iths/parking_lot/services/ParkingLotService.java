@@ -6,7 +6,6 @@ import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.entities.Queue;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.ParkingSlotRepository;
-import se.iths.parking_lot.utils.MessageSender;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -29,6 +28,7 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
     @Override
     public void create(ParkingLot parkingLot) {
         parkingLot.setQueue(new Queue());
+        parkingLot.getQueue().setParkingLot(parkingLot);
         parkingLotRepository.save(parkingLot);
     }
 
