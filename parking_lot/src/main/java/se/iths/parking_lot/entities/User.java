@@ -2,10 +2,10 @@ package se.iths.parking_lot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import se.iths.parking_lot.dtos.UserDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,9 @@ public class User implements Serializable {
     @NotEmpty
     @Column(unique = true)
     private String email;
+
+    @NotNull
+    private Boolean emailNotification = false;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)

@@ -8,7 +8,7 @@ import se.iths.parking_lot.services.RoleService;
 
 import java.util.List;
 
-import static se.iths.parking_lot.EntityMapper.roleToDto;
+import static se.iths.parking_lot.utils.EntityMapper.roleToDto;
 
 @RestController
 @RequestMapping("role")

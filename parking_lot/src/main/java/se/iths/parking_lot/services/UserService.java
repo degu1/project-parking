@@ -8,7 +8,7 @@ import se.iths.parking_lot.entities.User;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.QueueSlotRepository;
 import se.iths.parking_lot.repositories.UserRepository;
-import se.iths.parking_lot.utils.MessageSender;
+import se.iths.parking_lot.JMS.sender.MessageSender;
 
 import javax.transaction.Transactional;
 import java.util.List;

@@ -7,7 +7,7 @@ import se.iths.parking_lot.services.ParkingSlotService;
 
 import java.util.List;
 
-import static se.iths.parking_lot.EntityMapper.parkingSlotToDto;
+import static se.iths.parking_lot.utils.EntityMapper.parkingSlotToDto;
 
 @RestController
 @RequestMapping("parking_slots")

@@ -1,4 +1,4 @@
-package se.iths.parking_lot.config.messagequeue;
+package se.iths.message_receiver.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

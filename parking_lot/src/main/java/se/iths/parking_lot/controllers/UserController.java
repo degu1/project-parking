@@ -7,7 +7,7 @@ import se.iths.parking_lot.services.UserService;
 
 import java.util.List;
 
-import static se.iths.parking_lot.EntityMapper.userToDto;
+import static se.iths.parking_lot.utils.EntityMapper.userToDto;
 
 @RestController
 @RequestMapping("users")
