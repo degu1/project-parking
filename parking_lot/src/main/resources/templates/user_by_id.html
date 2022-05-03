@@ -8,6 +8,8 @@
 <body>
 <h1>User <span th:text="${user.name}"></span></h1>
 <p th:text="${user.getEmail()}"></p>
+<p th:if="${user.getEmailNotification()}">Email notification is turn on</p>
+<p th:unless="${user.getEmailNotification()}">Email notification is turn off</p>
 <a th:href="@{/tl_users/{userId}/edit (userId=${user.getId()})}">Edit my info</a>
 <h2>My Queue</h2>
 <th:block th:each="queueSlots:${user.getQueueSlots()}">

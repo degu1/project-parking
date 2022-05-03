@@ -12,6 +12,7 @@
         <tr>
             <td>Name</td>
             <td>Email</td>
+            <td>Email notification</td>
         </tr>
         <tr>
             <td hidden><input name="id" readonly
@@ -20,6 +21,8 @@
                        type="text"/></td>
             <td><input name="name" th:field="*{email}"
                        type="text"/></td>
+            <td><input name="name" th:field="*{emailNotification}"
+                       type="checkbox"/></td>
         </tr>
     </table>
     <input type="submit" value="Update"/>

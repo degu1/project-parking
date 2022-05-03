@@ -16,10 +16,6 @@ public class Queue implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @JsonIgnore
-    @OneToOne
-    private ParkingLot parkingLot;
-
     @OneToMany(mappedBy = "queue", cascade = CascadeType.MERGE, orphanRemoval = true)
     List<QueueSlot> queueSlots = new ArrayList<>();
 

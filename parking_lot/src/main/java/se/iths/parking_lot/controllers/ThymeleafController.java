@@ -10,8 +10,9 @@ import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.services.ParkingLotService;
 import se.iths.parking_lot.services.ParkingSlotService;
 
-import static se.iths.parking_lot.EntityMapper.parkingLotToDto;
-import static se.iths.parking_lot.EntityMapper.parkingSlotToDto;
+import static se.iths.parking_lot.utils.EntityMapper.parkingLotToDto;
+import static se.iths.parking_lot.utils.EntityMapper.parkingSlotToDto;
+
 
 @Controller
 @RequestMapping("tl_parking_lots")
