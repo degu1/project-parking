@@ -26,6 +26,7 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
     @Override
     public void create(ParkingLot parkingLot) {
         parkingLot.setQueue(new Queue());
+        parkingLot.getQueue().setParkingLot(parkingLot);
         parkingLotRepository.save(parkingLot);
     }
 

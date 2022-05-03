@@ -1,12 +1,14 @@
 package se.iths.parking_lot.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-
+@Data
 public class ParkingLot implements Serializable {
 
     @Id
@@ -19,7 +21,7 @@ public class ParkingLot implements Serializable {
     @OneToMany(mappedBy = "parkingLot", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ParkingSlot> parkingSlots = new ArrayList<>();
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     private Queue queue;
 
     public void removeParkingSlot(ParkingSlot parkingSlot) {
@@ -32,47 +34,5 @@ public class ParkingLot implements Serializable {
                 .filter(parkingSlot -> parkingSlot.getUser() == null)
                 .findFirst()
                 .orElseThrow(Exception::new); // TODO
-    }
-
-    public ParkingLot() {
-    }
-
-    public ParkingLot(Long id, String name, List<ParkingSlot> parkingSlots, Queue queue) {
-        this.id = id;
-        this.name = name;
-        this.parkingSlots = parkingSlots;
-        this.queue = queue;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<ParkingSlot> getParkingSlots() {
-        return parkingSlots;
-    }
-
-    public void setParkingSlots(List<ParkingSlot> parkingSlots) {
-        this.parkingSlots = parkingSlots;
-    }
-
-    public Queue getQueue() {
-        return queue;
-    }
-
-    public void setQueue(Queue queue) {
-        this.queue = queue;
     }
 }

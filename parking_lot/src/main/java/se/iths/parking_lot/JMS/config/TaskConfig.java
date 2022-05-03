@@ -1,4 +1,4 @@
-package com.example.message_receiver.config;
+package se.iths.parking_lot.JMS.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

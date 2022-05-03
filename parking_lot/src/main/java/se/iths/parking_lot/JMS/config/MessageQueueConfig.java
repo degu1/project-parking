@@ -1,4 +1,4 @@
-package se.iths.parking_lot.config.messagequeue;
+package se.iths.parking_lot.JMS.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -17,15 +17,13 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class MessageQueueConfig {
 
-    public static final String IN_PARKING = "Added to parking";
-    public static final String IN_QUEUE = "Added to queue";
-    public static final String QUEUE_UPDATED = "Queue updated";
+    public static final String PARKING_LOT_EMAIL = "PARKING_LOT_EMAIL";
 
     @Bean
     public MessageConverter messageConverter() {
 
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.TEXT);
+        converter.setTargetType(MessageType.BYTES);
         converter.setTypeIdPropertyName("_type");
 
         ObjectMapper objectMapper = new ObjectMapper();

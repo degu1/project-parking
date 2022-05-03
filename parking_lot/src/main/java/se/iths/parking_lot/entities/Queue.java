@@ -16,6 +16,10 @@ public class Queue implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @JsonIgnore
+    @OneToOne
+    private ParkingLot parkingLot;
+
     @OneToMany(mappedBy = "queue", cascade = CascadeType.MERGE, orphanRemoval = true)
     List<QueueSlot> queueSlots = new ArrayList<>();
 
@@ -33,6 +37,10 @@ public class Queue implements Serializable {
         return false;
     }
 
+    public void removeQueueSlot(QueueSlot queueSlot) {
+        this.getQueueSlots().remove(queueSlot);
+    }
+
     public QueueSlot getFirstSlot (Boolean electricCharge) throws Exception {
         return queueSlots.stream()
                 .filter(qSlot -> qSlot.getElectricCharge().equals(electricCharge))
@@ -40,4 +48,11 @@ public class Queue implements Serializable {
                 .findFirst()
                 .orElseThrow(Exception::new);
     }
+
+    public Long getQueuePosition (QueueSlot queueSlot) {
+        return queueSlots.stream()
+                .filter(q -> q.getId() <= queueSlot.getId())
+                .count();
+    }
+
 }

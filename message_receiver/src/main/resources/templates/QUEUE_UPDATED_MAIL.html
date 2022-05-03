@@ -1,0 +1,27 @@
+<!DOCTYPE html >
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="sv">
+<meta charset="UTF-8">
+
+<body style="font-family: Verdana">
+<div style="padding: 5% 20%">
+
+    <div style="text-align: center">
+        <h2>Ny placering i kö</h2>
+    </div>
+
+    <div style="background-color: #f1f3f4;padding: 50px; border-radius: 15px">
+        <p>Hej <span style="font-weight: bold" th:text="${messageObject.getUserName()}">!</span></p>
+        <br>
+        <div style="font-style: italic">
+            <p>Du har nu fått en ny plats i kön på <span th:text="${messageObject.getParkingLot()}">.</span></p>
+            <p>Din nya köplats är: <span th:text="${messageObject.getQueuePosition()}"></span></p>
+        </div>
+        <br>
+        <p>Mvh</p>
+        <p>Parking lot</p>
+    </div>
+</div>
+
+</body>
+
+</html>
