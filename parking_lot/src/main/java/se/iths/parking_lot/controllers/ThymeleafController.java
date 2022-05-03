@@ -10,15 +10,16 @@ import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.services.ParkingLotService;
 import se.iths.parking_lot.services.ParkingSlotService;
 
-import static se.iths.parking_lot.EntityMapper.parkingLotToDto;
-import static se.iths.parking_lot.EntityMapper.parkingSlotToDto;
+import static se.iths.parking_lot.utils.EntityMapper.parkingLotToDto;
+import static se.iths.parking_lot.utils.EntityMapper.parkingSlotToDto;
+
 
 @Controller
 @RequestMapping("tl_parking_lots")
 public class ThymeleafController {
 
-    ParkingLotService parkingLotService;
-    ParkingSlotService parkingSlotService;
+    private final ParkingLotService parkingLotService;
+    private final ParkingSlotService parkingSlotService;
 
     public ThymeleafController(ParkingLotService parkingLotService, ParkingSlotService parkingSlotService) {
         this.parkingLotService = parkingLotService;
@@ -68,8 +69,6 @@ public class ThymeleafController {
     public String slots(@PathVariable("id") Long id, Model model) {
         ParkingLotDto parkingLotDto = parkingLotToDto(parkingLotService.getById(id));
         model.addAttribute("parkingLot", parkingLotDto);
-        model.addAttribute("parkingLotName", parkingLotDto.name());
-        model.addAttribute("parkingSlots", parkingLotDto.parkingSlots());
         return "thymeleaf_parking_slots";
     }
 

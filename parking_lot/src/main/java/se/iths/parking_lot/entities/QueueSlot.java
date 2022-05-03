@@ -30,4 +30,10 @@ public class QueueSlot implements Serializable {
         this.user = user;
         this.electricCharge = electricCharge;
     }
+
+    public Long getPlaceInQueue() {
+        return queue.queueSlots.stream()
+                .filter(slot -> slot.id <= id)
+                .count();
+    }
 }

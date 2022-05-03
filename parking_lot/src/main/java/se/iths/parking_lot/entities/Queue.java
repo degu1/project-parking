@@ -16,18 +16,18 @@ public class Queue implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @JsonIgnore
-    @OneToOne
-    private ParkingLot parkingLot;
-
-    @OneToMany(mappedBy = "queue", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "queue", cascade = CascadeType.MERGE, orphanRemoval = true)
     List<QueueSlot> queueSlots = new ArrayList<>();
+
+    @OneToOne(mappedBy = "queue")
+    @JsonIgnore
+    ParkingLot parkingLot;
 
     // Method returns a boolean if added queue slot is first in queue.
     public Boolean addSlotToQueue(QueueSlot queueSlot) {
         queueSlots.add(queueSlot);
         queueSlot.setQueue(this);
-        if(queueSlots.size() == 1) {
+        if (queueSlots.size() == 1) {
             return true;
         }
         return false;

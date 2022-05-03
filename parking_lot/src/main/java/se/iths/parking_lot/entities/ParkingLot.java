@@ -28,7 +28,7 @@ public class ParkingLot implements Serializable {
         parkingSlots.remove(parkingSlot);
     }
 
-    public ParkingSlot emptyParkingSlot (Boolean electricCharge) throws Exception {
+    public ParkingSlot emptyParkingSlot(Boolean electricCharge) throws Exception {
         return this.parkingSlots.stream()
                 .filter(parkingSlot -> parkingSlot.getElectricCharge().equals(electricCharge))
                 .filter(parkingSlot -> parkingSlot.getUser() == null)

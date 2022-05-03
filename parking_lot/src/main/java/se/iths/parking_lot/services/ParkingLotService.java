@@ -18,8 +18,6 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
     private final ParkingLotRepository parkingLotRepository;
     private final ParkingSlotRepository parkingSlotRepository;
 
-
-
     public ParkingLotService(ParkingLotRepository parkingLotRepository, ParkingSlotRepository parkingSlotRepository) {
         this.parkingLotRepository = parkingLotRepository;
         this.parkingSlotRepository = parkingSlotRepository;
