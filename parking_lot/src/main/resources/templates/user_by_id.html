@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Parking Lot</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>User <span th:text="${user.name}"></span></h1>
+<p th:text="${user.getEmail()}"></p>
+<a th:href="@{/tl_users/{userId}/edit (userId=${user.getId()})}">Edit my info</a>
+<h2>My Queue</h2>
+<th:block th:each="queueSlots:${user.getQueueSlots()}">
+    <p th:text="${queueSlots.getQueue().getParkingLot().name}"></p>
+    <p th:text="${queueSlots.getPlaceInQueue()}"></p>
+    <a th:href="@{/tl_users/{userId}/queueSlots/{slotId}/remove (userId=${user.id}, slotId=${queueSlots.id})}">REMOVE</a>
+</th:block>
+<h2>My Parking</h2>
+<th:block th:each="slot:${user.getParkingSlots()}">
+    <p th:text="${slot.parkingLot.name}"></p>
+    <p th:text="${slot.name}"></p>
+    <a th:href="@{/tl_users/{userId}/parkingSlots/{slotId}/remove (userId=${user.id}, slotId=${slot.id})}">REMOVE</a>
+</th:block>
+
+
+<h2>Queue</h2>
+<form method="post" th:action="@{/tl_users/{userId}/queue (userId=${id})}" th:object="${addUserToQueueDto}">
+    <select th:field="*{parkingLotId}">
+        <option th:each="park : ${parkingLots}" th:text="${park.getName()}" th:value="${park.getId()}"></option>
+    </select>
+    <ul>
+        <li>Electric charge<input name="electricCharge" th:field="*{electricCharge}"
+                                  type="checkbox"/></li>
+        <input type="submit" value="Update"/>
+    </ul>
+</form>
+</body>
+</html>

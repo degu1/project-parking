@@ -6,9 +6,9 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="${parkingLotName}"></h1>
+<h1 th:text="${parkingLot.name()}"></h1>
 <ul>
-    <th:block th:each="parkingSlot: ${parkingSlots}">
+    <th:block th:each="parkingSlot: ${parkingLot.parkingSlots()}">
         <li>
             <p>
                 <span th:text="${parkingSlot.name}"></span>

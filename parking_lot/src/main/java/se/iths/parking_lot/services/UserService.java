@@ -81,7 +81,7 @@ public class UserService implements CRUDService<User> {
 
         try {
             ParkingSlot parkingSlot = parkingLot.emptyParkingSlot(electricCharge);
-            if(isFirstInQueue){
+            if (isFirstInQueue) {
                 parkingSlot.setUser(user);
                 queueSlotRepository.delete(queueSlot);
                 messageSender.addedToParkingSlotMessage(parkingSlot);
@@ -91,6 +91,9 @@ public class UserService implements CRUDService<User> {
         }
     }
 
+    public void removeQueueSlot(Long id) {
+        queueSlotRepository.deleteById(id);
+    }
 
     public void removeFromParkingLot(Long userId, Long queueSlotId) {
         User user = userRepository.findById(userId).orElseThrow(); // TODO

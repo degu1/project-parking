@@ -2,7 +2,6 @@ package se.iths.parking_lot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import se.iths.parking_lot.dtos.QueueSlotDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,5 +29,11 @@ public class QueueSlot implements Serializable {
     public QueueSlot(User user, Boolean electricCharge) {
         this.user = user;
         this.electricCharge = electricCharge;
+    }
+
+    public Long getPlaceInQueue() {
+        return queue.queueSlots.stream()
+                .filter(slot -> slot.id <= id)
+                .count();
     }
 }
