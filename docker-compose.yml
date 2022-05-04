@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0.23
+    container_name: pl-mysql
+    volumes:
+      - ~/apps/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=parking_lot
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3306:3306"
+  activemq:
+    container_name: pl-activemq
+    image: rmohr/activemq:latest
+    restart: always
+    ports:
+      - 8161:8161
+      - 61616:61616
+    environment:
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
+      - ACTIVEMQ_CONFIG_MINMEMORY=512
+      - ACTIVEMQ_CONFIG_MAXMEMORY=2048
+  server:
+    container_name: pl-server
+    build:
+      context: ./parking_lot
+      dockerfile: Dockerfile
+    image: server
+    ports:
+      - "8080:8080"
+    restart: "no"
+  messagereceiver:
+    container_name: pl-message-receiver
+    build:
+      context: ./message_receiver
+      dockerfile: Dockerfile
+    image: messagereceiver
+    environment:
+      spring.mail.host: smtp.gmail.com
+      spring.mail.port: 587
+      spring.mail.username: ${EMAIL_USERNAME}
+      spring.mail.password: ${EMAIL_PASSWORD}
+      spring.mail.properties.mail.smtp.auth: "true"
+      spring.mail.properties.mail.smtp.starttls.enable: "true"
+    ports:
+      - "8081:8081"
+    restart: "no"
