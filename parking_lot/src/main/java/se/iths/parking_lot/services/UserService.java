@@ -1,14 +1,18 @@
 package se.iths.parking_lot.services;
 
 import org.springframework.stereotype.Service;
+import se.iths.parking_lot.JMS.sender.MessageSender;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.entities.QueueSlot;
 import se.iths.parking_lot.entities.User;
+import se.iths.parking_lot.exceptions.NoEmptyParkingSlotException;
+import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
+import se.iths.parking_lot.exceptions.QueueSlotNotFoundException;
+import se.iths.parking_lot.exceptions.UserNotFoundException;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.QueueSlotRepository;
 import se.iths.parking_lot.repositories.UserRepository;
-import se.iths.parking_lot.JMS.sender.MessageSender;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -41,8 +45,8 @@ public class UserService implements CRUDService<User> {
     }
 
     @Override
-    public void updateWithPATCH(User user) {
-        User oldUser = userRepository.findById(user.getId()).orElseThrow();//TODO
+    public void updateWithPATCH(User user) throws UserNotFoundException {
+        User oldUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("User with id " + user.getId() + " not found."));
         if (user.getName().equals(null)) {
             oldUser.setName(user.getName());
         }
@@ -60,20 +64,20 @@ public class UserService implements CRUDService<User> {
     }
 
     @Override
-    public User getById(Long id) {
-        return userRepository.findById(id).orElseThrow();//TODO
+    public User getById(Long id) throws UserNotFoundException {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found."));
     }
 
     @Override
-    public void remove(Long id) {
-        User user = userRepository.findById(id).orElseThrow();//TODO
+    public void remove(Long id) throws UserNotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found."));
         user.getParkingSlots().forEach(ParkingSlot::removeUser);
         userRepository.deleteById(id);
     }
 
-    public void queryToParkingLot(Long userId, Long parkingLotId, Boolean electricCharge) {
-        User user = userRepository.findById(userId).orElseThrow(); // TODO
-        ParkingLot parkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(); // TODO
+    public void queryToParkingLot(Long userId, Long parkingLotId, Boolean electricCharge) throws UserNotFoundException, ParkingLotNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found."));
+        ParkingLot parkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + parkingLotId + " not found."));
 
         QueueSlot queueSlot = queueSlotRepository.save(new QueueSlot(user, electricCharge));
 
@@ -86,7 +90,7 @@ public class UserService implements CRUDService<User> {
                 queueSlotRepository.delete(queueSlot);
                 messageSender.addedToParkingSlotMessage(parkingSlot);
             }
-        } catch (Exception e) {
+        } catch (NoEmptyParkingSlotException e) {
             messageSender.addedToQueueMessage(queueSlot);
         }
     }
@@ -95,9 +99,9 @@ public class UserService implements CRUDService<User> {
         queueSlotRepository.deleteById(id);
     }
 
-    public void removeFromParkingLot(Long userId, Long queueSlotId) {
-        User user = userRepository.findById(userId).orElseThrow(); // TODO
-        QueueSlot queueSlot = queueSlotRepository.findById(queueSlotId).orElseThrow(); // TODO
+    public void removeFromQueueSlot(Long userId, Long queueSlotId) throws UserNotFoundException, QueueSlotNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found."));
+        QueueSlot queueSlot = queueSlotRepository.findById(queueSlotId).orElseThrow(() -> new QueueSlotNotFoundException("Queue slot with id " + queueSlotId + " not found"));
 
         user.removeQueueSlot(queueSlot);
     }

@@ -3,6 +3,9 @@ package se.iths.parking_lot.controllers;
 import org.springframework.web.bind.annotation.*;
 import se.iths.parking_lot.dtos.UserDto;
 import se.iths.parking_lot.entities.User;
+import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
+import se.iths.parking_lot.exceptions.QueueSlotNotFoundException;
+import se.iths.parking_lot.exceptions.UserNotFoundException;
 import se.iths.parking_lot.services.UserService;
 
 import java.util.List;
@@ -30,7 +33,7 @@ public class UserController {
     }
 
     @PatchMapping
-    public void updateWithPATCH(@RequestBody User user) {
+    public void updateWithPATCH(@RequestBody User user) throws UserNotFoundException {
         userService.updateWithPATCH(user);
     }
 
@@ -40,22 +43,22 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public UserDto getById(@PathVariable("id") Long id) {
+    public UserDto getById(@PathVariable("id") Long id) throws UserNotFoundException {
         return userToDto(userService.getById(id));
     }
 
     @DeleteMapping("{id}")
-    public void remove(@PathVariable("id") Long id) {
+    public void remove(@PathVariable("id") Long id) throws UserNotFoundException {
         userService.remove(id);
     }
 
     @PutMapping("{userId}/subscribe")
-    public void queueToParkingLot(@PathVariable("userId") Long userId, Long parkingLotId, Boolean electricCharge) {
+    public void queueToParkingLot(@PathVariable("userId") Long userId, Long parkingLotId, Boolean electricCharge) throws UserNotFoundException, ParkingLotNotFoundException {
         userService.queryToParkingLot(userId, parkingLotId, electricCharge);
     }
 
     @PutMapping("{userId}/unsubscribe")
-    public void removeFromParkingLot(@PathVariable("userId") Long userId, Long queueSlotId) {
-        userService.removeFromParkingLot(userId,queueSlotId);
+    public void removeFromParkingLot(@PathVariable("userId") Long userId, Long queueSlotId) throws UserNotFoundException, QueueSlotNotFoundException {
+        userService.removeFromQueueSlot(userId, queueSlotId);
     }
 }

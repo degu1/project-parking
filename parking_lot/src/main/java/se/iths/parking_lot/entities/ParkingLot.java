@@ -1,6 +1,7 @@
 package se.iths.parking_lot.entities;
 
 import lombok.Data;
+import se.iths.parking_lot.exceptions.NoEmptyParkingSlotException;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,11 +29,11 @@ public class ParkingLot implements Serializable {
         parkingSlots.remove(parkingSlot);
     }
 
-    public ParkingSlot emptyParkingSlot(Boolean electricCharge) throws Exception {
+    public ParkingSlot emptyParkingSlot(Boolean electricCharge) throws NoEmptyParkingSlotException {
         return this.parkingSlots.stream()
                 .filter(parkingSlot -> parkingSlot.getElectricCharge().equals(electricCharge))
                 .filter(parkingSlot -> parkingSlot.getUser() == null)
                 .findFirst()
-                .orElseThrow(Exception::new); // TODO
+                .orElseThrow(() -> new NoEmptyParkingSlotException("No empty parking slot to criteria in parking lot " + name));
     }
 }
