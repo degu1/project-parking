@@ -16,6 +16,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="message_receiver" options="-parameters" />
       <module name="parking_lot" options="-parameters" />
+      <module name="project-parking" options="" />
     </option>
   </component>
 </project>

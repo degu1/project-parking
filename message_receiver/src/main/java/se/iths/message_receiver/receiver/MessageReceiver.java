@@ -39,11 +39,10 @@ public class MessageReceiver {
 
             try {
                 emailService.sendEmail(messageObject);
+                logger.info("Email sent to user: " + messageObject.getUserName() + "!");
             } catch (MessagingException | IOException e) {
                 logger.error(e.getMessage());
             }
-
-            logger.info("Email sent to user: " + messageObject.getUserName() + "!");
         }
     }
 }
