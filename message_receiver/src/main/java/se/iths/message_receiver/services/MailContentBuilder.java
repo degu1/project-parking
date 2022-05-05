@@ -15,6 +15,7 @@ public class MailContentBuilder {
     }
 
     public String build(MessageObject messageObject) {
+
         Context context = new Context();
         context.setVariable("messageObject", messageObject);
         return templateEngine.process(messageObject.getMessageTopic().toString() + "_MAIL", context);
