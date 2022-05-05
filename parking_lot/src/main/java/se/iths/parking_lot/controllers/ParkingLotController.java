@@ -3,8 +3,12 @@ package se.iths.parking_lot.controllers;
 import org.springframework.web.bind.annotation.*;
 import se.iths.parking_lot.dtos.ParkingLotDto;
 import se.iths.parking_lot.entities.ParkingLot;
+import se.iths.parking_lot.exceptions.ConstrainException;
+import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
+import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.services.ParkingLotService;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import static se.iths.parking_lot.utils.EntityMapper.parkingLotToDto;
@@ -30,7 +34,7 @@ public class ParkingLotController {
     }
 
     @PatchMapping
-    public void updateWithPATCH(@RequestBody ParkingLot parkingLot) {
+    public void updateWithPATCH(@RequestBody ParkingLot parkingLot) throws ParkingLotNotFoundException, SQLIntegrityConstraintViolationException, ConstrainException {
         parkingLotService.updateWithPATCH(parkingLot);
     }
 
@@ -40,7 +44,7 @@ public class ParkingLotController {
     }
 
     @GetMapping("{id}")
-    public ParkingLotDto getById(@PathVariable("id")Long id) {
+    public ParkingLotDto getById(@PathVariable("id") Long id) throws ParkingLotNotFoundException {
         return parkingLotToDto(parkingLotService.getById(id));
     }
 
@@ -50,8 +54,8 @@ public class ParkingLotController {
     }
 
     @PutMapping("remove_parking_slot")
-    public void removeParkingSlot(Long parkingLotId, Long parkingSlotId) {
-        parkingLotService.removeParkingSlot(parkingLotId,parkingSlotId);
+    public void removeParkingSlot(Long parkingLotId, Long parkingSlotId) throws ParkingLotNotFoundException, ParkingSlotNotFoundException {
+        parkingLotService.removeParkingSlot(parkingLotId, parkingSlotId);
     }
 
 }

@@ -1,5 +1,6 @@
 package se.iths.parking_lot.controllers;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +8,8 @@ import se.iths.parking_lot.dtos.ParkingLotDto;
 import se.iths.parking_lot.dtos.ParkingSlotDto;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
+import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
+import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.services.ParkingLotService;
 import se.iths.parking_lot.services.ParkingSlotService;
 
@@ -52,34 +55,38 @@ public class ThymeleafController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, Model model) {
+    public String edit(@PathVariable("id") Long id, @RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) throws ParkingLotNotFoundException {
         ParkingLotDto parkingLotDto = parkingLotToDto(parkingLotService.getById(id));
         model.addAttribute("parkingLot", parkingLotDto);
+        model.addAttribute("constrainException", constrainException);
         return "thymeleaf_edit_parking_lot";
     }
 
     @PostMapping("/edit")
-    public String submitEdit(@ModelAttribute ParkingLot parkingLot, Model model) {
-        model.addAttribute("parkingLot", parkingLot);
-        parkingLotService.updateWithPATCH(parkingLot);
+    public String submitEdit(@ModelAttribute ParkingLot parkingLot, Model model) throws ParkingLotNotFoundException {
+        try {
+            parkingLotService.updateWithPATCH(parkingLot);
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:/tl_parking_lots/edit/" + parkingLot.getId() + "?constrainException=true";
+        }
         return "redirect:/tl_parking_lots";
     }
 
     @GetMapping("/{id}")
-    public String slots(@PathVariable("id") Long id, Model model) {
+    public String slots(@PathVariable("id") Long id, Model model) throws ParkingLotNotFoundException {
         ParkingLotDto parkingLotDto = parkingLotToDto(parkingLotService.getById(id));
         model.addAttribute("parkingLot", parkingLotDto);
         return "thymeleaf_parking_slots";
     }
 
     @GetMapping("/{lotId}/slots/{slotId}/remove")
-    public String removeSlots(@PathVariable("lotId") Long lotId, @PathVariable("slotId") Long slotId, Model model) {
+    public String removeSlots(@PathVariable("lotId") Long lotId, @PathVariable("slotId") Long slotId, Model model) throws ParkingSlotNotFoundException {
         parkingSlotService.removeUserFromParkingSlot(slotId);
         return "redirect:/tl_parking_lots/{lotId}";
     }
 
     @GetMapping("/{lotId}/slot/{id}/edit")
-    public String editParkingSlot(@PathVariable("id") Long id, @PathVariable("lotId") Long lotId, Model model) {
+    public String editParkingSlot(@PathVariable("id") Long id, @PathVariable("lotId") Long lotId, Model model) throws ParkingSlotNotFoundException {
         ParkingSlotDto parkingSlotDto = parkingSlotToDto(parkingSlotService.getById(id));
         model.addAttribute("parkingSlot", parkingSlotDto);
         model.addAttribute("lotId", lotId);
@@ -87,14 +94,14 @@ public class ThymeleafController {
     }
 
     @PostMapping("/{lotId}/slot/edit")
-    public String submitEditSlot(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, Model model) {
+    public String submitEditSlot(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, Model model) throws ParkingSlotNotFoundException {
         model.addAttribute("parkingSlot", parkingSlot);
         parkingSlotService.updateWithPATCH(parkingSlot);
         return "redirect:/tl_parking_lots/{lotId}";
     }
 
     @PostMapping("{lotId}/slots/add")
-    public String addSubmit(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, Model model) {
+    public String addSubmit(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, Model model) throws ParkingLotNotFoundException {
         model.addAttribute("parkingSlot", parkingSlot);
         parkingSlotService.create(parkingSlot, lotId);
         return "redirect:/tl_parking_lots/{lotId}";

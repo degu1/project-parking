@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.entities.Queue;
+import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
+import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.ParkingSlotRepository;
 
@@ -36,12 +38,16 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
     }
 
     @Override
-    public void updateWithPATCH(ParkingLot parkingLot) {
-        ParkingLot oldParkingLot = parkingLotRepository.findById(parkingLot.getId()).orElseThrow();//TODO
+    public void updateWithPATCH(ParkingLot parkingLot) throws ParkingLotNotFoundException {
+
+        ParkingLot oldParkingLot = parkingLotRepository
+                .findById(parkingLot.getId())
+                .orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + parkingLot.getId() + " not found"));
 
         if (parkingLot.getName() != null) {
             oldParkingLot.setName(parkingLot.getName());
         }
+
     }
 
     @Override
@@ -53,8 +59,10 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
     }
 
     @Override
-    public ParkingLot getById(Long id) {
-        return parkingLotRepository.findById(id).orElseThrow();  //TODO
+    public ParkingLot getById(Long id) throws ParkingLotNotFoundException {
+        return parkingLotRepository
+                .findById(id)
+                .orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + id + " not found"));
     }
 
     @Override
@@ -62,9 +70,9 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
         parkingLotRepository.deleteById(id);
     }
 
-    public void removeParkingSlot(Long parkingLotId, Long parkingSlotId) {
-        ParkingSlot parkingSlot = parkingSlotRepository.findById(parkingSlotId).orElseThrow(); // TODO
-        ParkingLot parkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(); // TODO
+    public void removeParkingSlot(Long parkingLotId, Long parkingSlotId) throws ParkingLotNotFoundException, ParkingSlotNotFoundException {
+        ParkingSlot parkingSlot = parkingSlotRepository.findById(parkingSlotId).orElseThrow(() -> new ParkingSlotNotFoundException("Parking slot with id " + parkingSlotId + " not found"));
+        ParkingLot parkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + parkingLotId + " not found"));
 
         parkingLot.removeParkingSlot(parkingSlot);
     }

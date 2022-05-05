@@ -2,6 +2,7 @@ package se.iths.parking_lot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import se.iths.parking_lot.exceptions.QueueIsEmptyException;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -37,12 +38,12 @@ public class Queue implements Serializable {
         this.getQueueSlots().remove(queueSlot);
     }
 
-    public QueueSlot getFirstSlot (Boolean electricCharge) throws Exception {
+    public QueueSlot getFirstSlot(Boolean electricCharge) throws QueueIsEmptyException {
         return queueSlots.stream()
                 .filter(qSlot -> qSlot.getElectricCharge().equals(electricCharge))
                 .sorted((qSlot1, qSlot2) -> (int) (qSlot1.getId() - qSlot2.getId()))
                 .findFirst()
-                .orElseThrow(Exception::new);
+                .orElseThrow(() -> new QueueIsEmptyException("No one in queue with matching criteria"));
     }
 
     public Long getQueuePosition (QueueSlot queueSlot) {
@@ -50,5 +51,4 @@ public class Queue implements Serializable {
                 .filter(q -> q.getId() <= queueSlot.getId())
                 .count();
     }
-
 }

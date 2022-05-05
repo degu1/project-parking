@@ -1,14 +1,17 @@
 package se.iths.parking_lot.services;
 
 import org.springframework.stereotype.Service;
+import se.iths.parking_lot.JMS.sender.MessageSender;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.entities.Queue;
 import se.iths.parking_lot.entities.QueueSlot;
+import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
+import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
+import se.iths.parking_lot.exceptions.QueueIsEmptyException;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.ParkingSlotRepository;
 import se.iths.parking_lot.repositories.QueueSlotRepository;
-import se.iths.parking_lot.JMS.sender.MessageSender;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
-public class ParkingSlotService implements CRUDService<ParkingSlot>{
+public class ParkingSlotService implements CRUDService<ParkingSlot> {
 
     private final ParkingSlotRepository parkingSlotRepository;
     private final ParkingLotRepository parkingLotRepository;
@@ -35,8 +38,8 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
 
     }
 
-    public void create(ParkingSlot parkingSlot, Long parkingLotId) {
-        ParkingLot foundParkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(); //TODO
+    public void create(ParkingSlot parkingSlot, Long parkingLotId) throws ParkingLotNotFoundException {
+        ParkingLot foundParkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + parkingLotId + " not found"));
         parkingSlot.setParkingLot(foundParkingLot);
         parkingSlotRepository.save(parkingSlot);
 
@@ -46,8 +49,8 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
             QueueSlot queueSlot = queue.getFirstSlot(parkingSlot.getElectricCharge());
             parkingSlot.setUser(queueSlot.getUser());
             queueSlotRepository.delete(queueSlot);
-        } catch (Exception e) {
-            System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");
+        } catch (QueueIsEmptyException e) {
+            System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");//TODO logg
         }
     }
 
@@ -57,13 +60,13 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
     }
 
     @Override
-    public void updateWithPATCH(ParkingSlot parkingSlot) {
-        ParkingSlot oldParkingSlot = parkingSlotRepository.findById(parkingSlot.getId()).orElseThrow();//TODO
+    public void updateWithPATCH(ParkingSlot parkingSlot) throws ParkingSlotNotFoundException {
+        ParkingSlot oldParkingSlot = parkingSlotRepository.findById(parkingSlot.getId()).orElseThrow(() -> new ParkingSlotNotFoundException("Parking slot with id " + parkingSlot.getId() + " not found"));
 
         if (parkingSlot.getName() != null) {
             oldParkingSlot.setName(parkingSlot.getName());
         }
-        if(parkingSlot.getElectricCharge() != null) {
+        if (parkingSlot.getElectricCharge() != null) {
             oldParkingSlot.setElectricCharge(parkingSlot.getElectricCharge());
         }
     }
@@ -71,13 +74,14 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
     @Override
     public List<ParkingSlot> getAll() {
         Iterable<ParkingSlot> parkingSlots = parkingSlotRepository.findAll();
-        return StreamSupport.stream(parkingSlots.spliterator(), false)
-                .toList();
+        return StreamSupport.stream(parkingSlots.spliterator(), false).toList();
     }
 
     @Override
-    public ParkingSlot getById(Long id) {
-        return parkingSlotRepository.findById(id).orElseThrow();  //TODO
+    public ParkingSlot getById(Long id) throws ParkingSlotNotFoundException {
+        return parkingSlotRepository
+                .findById(id)
+                .orElseThrow(() -> new ParkingSlotNotFoundException("Parking slot with id " + id + " not found"));
     }
 
     @Override
@@ -87,8 +91,10 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
         parkingSlotRepository.deleteById(id);
     }
 
-    public void removeUserFromParkingSlot(Long parkingSlotId){
-        ParkingSlot parkingSlot = parkingSlotRepository.findById(parkingSlotId).orElseThrow(); // TODO
+    public void removeUserFromParkingSlot(Long parkingSlotId) throws ParkingSlotNotFoundException {
+        ParkingSlot parkingSlot = parkingSlotRepository
+                .findById(parkingSlotId)
+                .orElseThrow(() -> new ParkingSlotNotFoundException("Parking slot with id " + parkingSlotId + " not found"));
         parkingSlot.removeUser();
         Queue queue = parkingSlot.getParkingLot().getQueue();
 
@@ -101,8 +107,7 @@ public class ParkingSlotService implements CRUDService<ParkingSlot>{
 
             messageSender.addedToParkingSlotMessage(parkingSlot);
             messageSender.sendQueueUpdateMessage(queue);
-
-        } catch (Exception e) {
+        } catch (QueueIsEmptyException e) {
             System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");
         }
     }
