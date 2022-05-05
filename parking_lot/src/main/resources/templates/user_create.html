@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>Create new user</h1>
+<form method="post" th:action="@{/tl_users/create}" th:object="${user}">
+    <ul>
+        <li><p>Name</p><input name="name" th:field="*{name}" type="text"/></li>
+        <li><p>Email</p><input name="name" th:field="*{email}" type="text"/></li>
+        <li><p>Email notification</p><input name="name" th:field="*{emailNotification}" type="checkbox"/></li>
+    </ul>
+    <p th:if="${constrainException}">Constrain Exception</p>
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>
