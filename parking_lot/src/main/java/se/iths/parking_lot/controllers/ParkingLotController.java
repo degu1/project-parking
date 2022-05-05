@@ -3,6 +3,7 @@ package se.iths.parking_lot.controllers;
 import org.springframework.web.bind.annotation.*;
 import se.iths.parking_lot.dtos.ParkingLotDto;
 import se.iths.parking_lot.entities.ParkingLot;
+import se.iths.parking_lot.exceptions.ConstrainException;
 import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
 import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.services.ParkingLotService;
@@ -33,7 +34,7 @@ public class ParkingLotController {
     }
 
     @PatchMapping
-    public void updateWithPATCH(@RequestBody ParkingLot parkingLot) throws ParkingLotNotFoundException, SQLIntegrityConstraintViolationException {
+    public void updateWithPATCH(@RequestBody ParkingLot parkingLot) throws ParkingLotNotFoundException, SQLIntegrityConstraintViolationException, ConstrainException {
         parkingLotService.updateWithPATCH(parkingLot);
     }
 

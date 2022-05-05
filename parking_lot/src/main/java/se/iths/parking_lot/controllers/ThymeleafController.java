@@ -1,5 +1,6 @@
 package se.iths.parking_lot.controllers;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,6 @@ import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
 import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.services.ParkingLotService;
 import se.iths.parking_lot.services.ParkingSlotService;
-
-import java.sql.SQLIntegrityConstraintViolationException;
 
 import static se.iths.parking_lot.utils.EntityMapper.parkingLotToDto;
 import static se.iths.parking_lot.utils.EntityMapper.parkingSlotToDto;
@@ -65,13 +64,10 @@ public class ThymeleafController {
 
     @PostMapping("/edit")
     public String submitEdit(@ModelAttribute ParkingLot parkingLot, Model model) throws ParkingLotNotFoundException {
-        // model.addAttribute("parkingLot", parkingLot);
-        Long id = parkingLot.getId();
         try {
             parkingLotService.updateWithPATCH(parkingLot);
-        } catch (SQLIntegrityConstraintViolationException e) {
-            //return "redirect:/tl_parking_lots/16?constrainException=true";
-            return "redirect:/tl_parking_lots/16";
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:/tl_parking_lots/edit/" + parkingLot.getId() + "?constrainException=true";
         }
         return "redirect:/tl_parking_lots";
     }

@@ -1,6 +1,7 @@
 package se.iths.parking_lot.services;
 
 
+import se.iths.parking_lot.exceptions.ConstrainException;
 import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
 import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.exceptions.UserNotFoundException;
@@ -13,7 +14,7 @@ public interface CRUDService<T> {
 
     void updateWithPUT(T t);
 
-    void updateWithPATCH(T t) throws UserNotFoundException, ParkingSlotNotFoundException, ParkingLotNotFoundException, SQLIntegrityConstraintViolationException;
+    void updateWithPATCH(T t) throws UserNotFoundException, ParkingSlotNotFoundException, ParkingLotNotFoundException, SQLIntegrityConstraintViolationException, ConstrainException;
 
     List<T> getAll();
 
