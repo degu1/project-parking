@@ -1,5 +1,6 @@
 package se.iths.parking_lot.controllers;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,15 +61,21 @@ public class ThymeleafUserController {
     }
 
     @GetMapping("{userId}/edit")
-    public String editUser(@PathVariable("userId") Long userId, Model model) throws UserNotFoundException {
+    public String editUser(@PathVariable("userId") Long userId, @RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) throws UserNotFoundException {
         User user = userService.getById(userId);
         model.addAttribute("user", user);
+        model.addAttribute("constrainException", constrainException);
         return "user_edit";
     }
 
     @PostMapping("{userId}/edit/submit")
-    public String editSubmit(@ModelAttribute User user, @PathVariable("userId") Long userId, Model model) {
-        userService.updateWithPUT(user);
+    public String editSubmit(@ModelAttribute User user, @PathVariable("userId") Long userId) throws UserNotFoundException {
+        try {
+            userService.updateWithPATCH(user);
+        } catch (
+                DataIntegrityViolationException e) {
+            return "redirect:/tl_users/{userId}/edit?constrainException=true";
+        }
         return "redirect:/tl_users/{userId}";
     }
 }
