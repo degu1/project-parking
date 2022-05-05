@@ -7,19 +7,19 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="${parkingLot.name()}"></h1>
-<form method="post" th:action="@{/tl_parking_lots/edit}" th:object="${parkingLot}">
-    <table>
-        <tr>
-            <td>Name</td>
-            <td><input name="id" readonly
-                       th:field="*{id}" type="text"/></td>
-            <td><input name="name" th:field="*{name}"
-                       type="text"/></td>
-        </tr>
-    </table>
-    <p th:if="${constrainException}">Constrain Exception</p>
-    <input type="submit" value="Update"/>
-</form>
+<main>
+    <h1 th:text="${parkingLot.name()}"></h1>
+    <form method="post" th:action="@{/tl_parking_lots/edit}" th:object="${parkingLot}">
+        <ul>
+            <li>
+                <td>Name</td>
+                <td hidden="hidden"><input name="id" readonly th:field="*{id}" type="text"/></td>
+                <td><input name="name" th:field="*{name}" type="text"/></td>
+            </li>
+        </ul>
+        <p th:if="${constrainException}">Constrain Exception</p>
+        <button class="add" type="submit">Update</button>
+    </form>
+</main>
 </body>
 </html>

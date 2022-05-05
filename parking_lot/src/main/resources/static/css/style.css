@@ -1,13 +1,12 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: Verdana;
+    font-family: "Arial";
     font-size: 14px;
 }
 
 h1 {
     font-size: 40px;
-    color: blue;
 }
 
 main {
@@ -23,6 +22,7 @@ ul {
     display: block;
     width: fit-content;
     list-style: none;
+    box-shadow: #444444 10px 10px;
 }
 
 li {
@@ -30,11 +30,39 @@ li {
     grid-template-columns: 60% 20% 20%;
     min-width: 600px;
     margin: 5px;
+    padding: 5px;
     border: solid #acacac 1px;
-    border-radius: 5px;
+}
+
+#parking-slot-list {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 1fr;
+    align-content: center;
+    margin: 5px;
+    padding: 5px;
+    border: solid #acacac 1px;
+}
+
+#parking-slot-list span {
+    font-weight: normal;
+}
+
+#parking-slot-list section {
+    display: grid;
+    justify-self: right;
+    flex-direction: column;
 }
 
 a {
+    align-content: center;
+    margin: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: black;
+}
+
+p {
     margin: 5px;
     padding: 5px 10px;
     text-decoration: none;
@@ -42,7 +70,9 @@ a {
 }
 
 .title {
+    align-content: center;
     text-align: start;
+    align-content: center;
     font-weight: bold;
 }
 
@@ -50,18 +80,32 @@ a {
     color: white;
     background-color: #2a86c0;
     border-radius: 5px;
+    align-self: center;
 }
 
 .delete {
     color: white;
-    background-color: #c02a2a;
+    background-color: #e35959;
     border-radius: 5px;
+    align-self: center;
 }
 
 .add {
     padding: 10px 15px;
     width: fit-content;
     color: white;
-    background-color: #3ec02a;
+    background-color: #4db63f;
     border-radius: 5px;
+}
+
+.return {
+    padding: 10px 15px;
+    width: fit-content;
+    color: white;
+    background-color: #444444;
+    border-radius: 5px;
+}
+
+button {
+    border-style: none;
 }
