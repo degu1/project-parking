@@ -10,6 +10,7 @@ import se.iths.parking_lot.repositories.ParkingLotRepository;
 import se.iths.parking_lot.repositories.ParkingSlotRepository;
 
 import javax.transaction.Transactional;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -38,7 +39,7 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
     }
 
     @Override
-    public void updateWithPATCH(ParkingLot parkingLot) throws ParkingLotNotFoundException {
+    public void updateWithPATCH(ParkingLot parkingLot) throws ParkingLotNotFoundException, SQLIntegrityConstraintViolationException {
         ParkingLot oldParkingLot = parkingLotRepository
                 .findById(parkingLot.getId())
                 .orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + parkingLot.getId() + " not found"));

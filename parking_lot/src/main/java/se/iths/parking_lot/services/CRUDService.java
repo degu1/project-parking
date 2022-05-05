@@ -5,6 +5,7 @@ import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
 import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.exceptions.UserNotFoundException;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public interface CRUDService<T> {
@@ -12,7 +13,7 @@ public interface CRUDService<T> {
 
     void updateWithPUT(T t);
 
-    void updateWithPATCH(T t) throws UserNotFoundException, ParkingSlotNotFoundException, ParkingLotNotFoundException;
+    void updateWithPATCH(T t) throws UserNotFoundException, ParkingSlotNotFoundException, ParkingLotNotFoundException, SQLIntegrityConstraintViolationException;
 
     List<T> getAll();
 

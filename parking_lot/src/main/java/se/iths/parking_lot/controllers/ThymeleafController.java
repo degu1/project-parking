@@ -12,6 +12,8 @@ import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.services.ParkingLotService;
 import se.iths.parking_lot.services.ParkingSlotService;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import static se.iths.parking_lot.utils.EntityMapper.parkingLotToDto;
 import static se.iths.parking_lot.utils.EntityMapper.parkingSlotToDto;
 
@@ -54,16 +56,23 @@ public class ThymeleafController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, Model model) throws ParkingLotNotFoundException {
+    public String edit(@PathVariable("id") Long id, @RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) throws ParkingLotNotFoundException {
         ParkingLotDto parkingLotDto = parkingLotToDto(parkingLotService.getById(id));
         model.addAttribute("parkingLot", parkingLotDto);
+        model.addAttribute("constrainException", constrainException);
         return "thymeleaf_edit_parking_lot";
     }
 
     @PostMapping("/edit")
     public String submitEdit(@ModelAttribute ParkingLot parkingLot, Model model) throws ParkingLotNotFoundException {
-        model.addAttribute("parkingLot", parkingLot);
-        parkingLotService.updateWithPATCH(parkingLot);
+        // model.addAttribute("parkingLot", parkingLot);
+        Long id = parkingLot.getId();
+        try {
+            parkingLotService.updateWithPATCH(parkingLot);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            //return "redirect:/tl_parking_lots/16?constrainException=true";
+            return "redirect:/tl_parking_lots/16";
+        }
         return "redirect:/tl_parking_lots";
     }
 

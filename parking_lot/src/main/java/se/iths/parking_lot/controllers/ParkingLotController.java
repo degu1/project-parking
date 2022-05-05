@@ -7,6 +7,7 @@ import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
 import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.services.ParkingLotService;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import static se.iths.parking_lot.utils.EntityMapper.parkingLotToDto;
@@ -32,7 +33,7 @@ public class ParkingLotController {
     }
 
     @PatchMapping
-    public void updateWithPATCH(@RequestBody ParkingLot parkingLot) throws ParkingLotNotFoundException {
+    public void updateWithPATCH(@RequestBody ParkingLot parkingLot) throws ParkingLotNotFoundException, SQLIntegrityConstraintViolationException {
         parkingLotService.updateWithPATCH(parkingLot);
     }
 
