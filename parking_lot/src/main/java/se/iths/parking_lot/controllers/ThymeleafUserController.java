@@ -78,4 +78,22 @@ public class ThymeleafUserController {
         }
         return "redirect:/tl_users/{userId}";
     }
+
+    @GetMapping("create")
+    public String createUser(@RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) {
+        model.addAttribute("constrainException", constrainException);
+        model.addAttribute("user", new User());
+        return "user_create";
+    }
+
+    @PostMapping("create")
+    public String createUserSubmit(User user) {
+        try {
+            userService.create(user);
+        } catch (
+                DataIntegrityViolationException e) {
+            return "redirect:/tl_users/create?constrainException=true";
+        }
+        return "redirect:/tl_users/create";
+    }
 }
