@@ -1,7 +1,15 @@
-FROM openjdk:17-alpine
-WORKDIR /message-receiver
+#
+# Build stage
+#
+FROM maven:3.8.5-openjdk-18-slim AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
 
-COPY target/message_receiver-1.0-SNAPSHOT.jar /message-receiver
-COPY target/classes /message_receiver/classes
-
-ENTRYPOINT ["java", "-jar", "message_receiver-1.0-SNAPSHOT.jar"]
+#
+# Package stage
+#
+FROM openjdk:18-jdk-slim
+COPY --from=build /home/app/target/message_receiver.jar /usr/local/lib/
+EXPOSE 8081
+ENTRYPOINT ["java","-jar","/usr/local/lib/message_receiver.jar"]

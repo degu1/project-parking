@@ -1,7 +1,15 @@
-FROM openjdk:17-alpine
-WORKDIR /parking-lot
+#
+# Build stage
+#
+FROM maven:3.8.5-openjdk-18-slim AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
 
-COPY target/parking_lot-1.0-SNAPSHOT.jar /parking-lot
-COPY target/classes /parking-lot/classes
-
-ENTRYPOINT ["java", "-jar", "parking_lot-1.0-SNAPSHOT.jar"]
+#
+# Package stage
+#
+FROM openjdk:18-jdk-slim
+COPY --from=build /home/app/target/parking_lot.jar /usr/local/lib/
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/local/lib/parking_lot.jar"]
