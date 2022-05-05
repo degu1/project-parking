@@ -47,11 +47,14 @@ public class UserService implements CRUDService<User> {
     @Override
     public void updateWithPATCH(User user) throws UserNotFoundException {
         User oldUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("User with id " + user.getId() + " not found."));
-        if (user.getName().equals(null)) {
+        if (!user.getName().equals(null)) {
             oldUser.setName(user.getName());
         }
-        if (user.getEmail().equals(null)) {
+        if (!user.getEmail().equals(null)) {
             oldUser.setEmail(user.getEmail());
+        }
+        if (!user.getEmailNotification().equals(null)) {
+            oldUser.setEmailNotification(user.getEmailNotification());
         }
 
         userRepository.save(oldUser);

@@ -36,15 +36,19 @@ public class ThymeleafController {
     }
 
     @GetMapping("add")
-    public String add(Model model) {
+    public String add(ParkingLot parkingLot, @RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) {
         model.addAttribute("parkingLot", new ParkingLot());
+        model.addAttribute("constrainException", constrainException);
         return "thymeleaf_add_parking_lot";
     }
 
     @PostMapping("add")
     public String add(@ModelAttribute ParkingLot parkingLot, Model model) {
-        model.addAttribute(parkingLot);
-        parkingLotService.create(parkingLot);
+        try {
+            parkingLotService.create(parkingLot);
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:/tl_parking_lots/add?constrainException=true";
+        }
         return "redirect:/tl_parking_lots";
     }
 
@@ -86,31 +90,39 @@ public class ThymeleafController {
     }
 
     @GetMapping("/{lotId}/slot/{id}/edit")
-    public String editParkingSlot(@PathVariable("id") Long id, @PathVariable("lotId") Long lotId, Model model) throws ParkingSlotNotFoundException {
+    public String editParkingSlot(@PathVariable("id") Long id, @PathVariable("lotId") Long lotId, @RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) throws ParkingSlotNotFoundException {
         ParkingSlotDto parkingSlotDto = parkingSlotToDto(parkingSlotService.getById(id));
         model.addAttribute("parkingSlot", parkingSlotDto);
         model.addAttribute("lotId", lotId);
+        model.addAttribute("constrainException", constrainException);
         return "thymeleaf_edit_parking_slot";
     }
 
     @PostMapping("/{lotId}/slot/edit")
-    public String submitEditSlot(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, Model model) throws ParkingSlotNotFoundException {
-        model.addAttribute("parkingSlot", parkingSlot);
-        parkingSlotService.updateWithPATCH(parkingSlot);
+    public String submitEditSlot(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId) throws ParkingSlotNotFoundException {
+        try {
+            parkingSlotService.updateWithPATCH(parkingSlot);
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:/tl_parking_lots/{lotId}/slot/" + parkingSlot.getId() + "/edit?constrainException=true";
+        }
         return "redirect:/tl_parking_lots/{lotId}";
     }
 
     @PostMapping("{lotId}/slots/add")
     public String addSubmit(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, Model model) throws ParkingLotNotFoundException {
-        model.addAttribute("parkingSlot", parkingSlot);
-        parkingSlotService.create(parkingSlot, lotId);
+        try {
+            parkingSlotService.create(parkingSlot, lotId);
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:/tl_parking_lots/{lotId}/slots/add?constrainException=true";
+        }
         return "redirect:/tl_parking_lots/{lotId}";
     }
 
     @GetMapping("{lotId}/slots/add")
-    public String add(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, Model model) {
+    public String add(@ModelAttribute ParkingSlot parkingSlot, @PathVariable("lotId") Long lotId, @RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) {
         model.addAttribute("parkingSlot", parkingSlot);
         model.addAttribute("lotId", lotId);
+        model.addAttribute("constrainException", constrainException);
         return "thymeleaf_add_parking_slot";
     }
 
