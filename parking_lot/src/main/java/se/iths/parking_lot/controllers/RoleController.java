@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import se.iths.parking_lot.dtos.RoleDto;
 import se.iths.parking_lot.services.RoleService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static se.iths.parking_lot.utils.EntityMapper.roleToDto;
@@ -23,5 +25,15 @@ public class RoleController {
     @GetMapping("/all")
     public List<RoleDto> getAll() {
         return roleToDto(roleService.getAll());
+    }
+
+    @GetMapping("check-role")
+    public String checkRole(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if(cookie.getName().equals("token")){
+
+            }
+        }
     }
 }

@@ -44,7 +44,7 @@ public class JwtAuthenticationController {
         ResponseCookie cookie = ResponseCookie.from("token", token)
                 .httpOnly(true)
                 .secure(true)
-                .maxAge(180L)
+                .maxAge(5000L)
                 .build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
