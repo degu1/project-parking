@@ -1,22 +1,25 @@
 package se.iths.parking_lot.services;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import se.iths.parking_lot.entities.User;
+import se.iths.parking_lot.repositories.UserRepository;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
+    UserRepository userRepository;
+
+    public MyUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if("foo".equals(username)) {
-            return new User("foo", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6", new ArrayList<>());
-        }else{
-            throw new UsernameNotFoundException("User not found with username: " + username);
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        if (email != null) {
+            return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        } else {
+            throw new UsernameNotFoundException("Email is empty.");
         }
     }
 }
