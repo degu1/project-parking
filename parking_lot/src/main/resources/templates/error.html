@@ -6,6 +6,13 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>Error</h1>
+<main>
+    <article id="error-container">
+        <h1 style="color: #e35959">Error</h1>
+        <p>Something went wrong!</p>
+        <p>You can try to go back to the home page by clicking here:</p>
+        <a class="return" th:href="@{/tl_parking_lots}">Back</a>
+    </article>
+</main>
 </body>
 </html>

@@ -6,35 +6,75 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>User <span th:text="${user.name}"></span></h1>
-<p th:text="${user.getEmail()}"></p>
-<p th:if="${user.getEmailNotification()}">Email notification is turn on</p>
-<p th:unless="${user.getEmailNotification()}">Email notification is turn off</p>
-<a th:href="@{/tl_users/{userId}/edit (userId=${user.getId()})}">Edit my info</a>
-<h2>My Queue</h2>
-<th:block th:each="queueSlots:${user.getQueueSlots()}">
-    <p th:text="${queueSlots.getQueue().getParkingLot().name}"></p>
-    <p th:text="${queueSlots.getPlaceInQueue()}"></p>
-    <a th:href="@{/tl_users/{userId}/queueSlots/{slotId}/remove (userId=${user.id}, slotId=${queueSlots.id})}">REMOVE</a>
-</th:block>
-<h2>My Parking</h2>
-<th:block th:each="slot:${user.getParkingSlots()}">
-    <p th:text="${slot.parkingLot.name}"></p>
-    <p th:text="${slot.name}"></p>
-    <a th:href="@{/tl_users/{userId}/parkingSlots/{slotId}/remove (userId=${user.id}, slotId=${slot.id})}">REMOVE</a>
-</th:block>
+<main>
 
+    <h1>User <span th:text="${user.name}"></span></h1>
 
-<h2>Queue</h2>
-<form method="post" th:action="@{/tl_users/{userId}/queue (userId=${id})}" th:object="${addUserToQueueDto}">
-    <select th:field="*{parkingLotId}">
-        <option th:each="park : ${parkingLots}" th:text="${park.getName()}" th:value="${park.getId()}"></option>
-    </select>
-    <ul>
-        <li>Electric charge<input name="electricCharge" th:field="*{electricCharge}"
-                                  type="checkbox"/></li>
-        <input type="submit" value="Update"/>
-    </ul>
-</form>
+    <h2>Information</h2>
+
+    <section>
+        <article>
+            <p th:text="${user.getEmail()}"></p>
+            <p th:if="${user.getEmailNotification()}">Email notification is turn on</p>
+            <p th:unless="${user.getEmailNotification()}">Email notification is turn off</p>
+            <a class="return" th:href="@{/tl_users/{userId}/edit (userId=${user.getId()})}">Edit my info</a>
+        </article>
+    </section>
+
+    <h2>My Queue</h2>
+
+    <section>
+        <table>
+            <tr>
+                <th>Parking lot</th>
+                <th>Position</th>
+                <th>Remove</th>
+            </tr>
+            <th:block th:each="queueSlots:${user.getQueueSlots()}">
+                <tr>
+                    <td th:text="${queueSlots.getQueue().getParkingLot().name}"></td>
+                    <td th:text="${queueSlots.getPlaceInQueue()}"></td>
+                    <td hidden th:text="${queueSlots.getPlaceInQueue()}"></td>
+                    <td><a class="delete"
+                           th:href="@{/tl_users/{userId}/queueSlots/{slotId}/remove (userId=${user.id}, slotId=${queueSlots.id})}">REMOVE</a>
+                    </td>
+            </th:block>
+        </table>
+    </section>
+
+    <h2>My Parking</h2>
+
+    <section>
+        <table>
+
+            <th>Parking lot</th>
+            <th>Parking slot</th>
+            <th>Remove</th>
+
+            <th:block th:each="slot:${user.getParkingSlots()}">
+                <tr>
+                    <td th:text="${slot.parkingLot.name}"></td>
+                    <td th:text="${slot.name}"></td>
+                    <td><a class="delete"
+                       th:href="@{/tl_users/{userId}/parkingSlots/{slotId}/remove (userId=${user.id}, slotId=${slot.id})}">REMOVE</a>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+    </section>
+
+    <h2>Get parking slot</h2>
+
+    <section>
+        <form method="post" th:action="@{/tl_users/{userId}/queue (userId=${id})}" th:object="${addUserToQueueDto}">
+            <p>Lot</p>
+            <select th:field="*{parkingLotId}">
+                <option th:each="park : ${parkingLots}" th:text="${park.getName()}" th:value="${park.getId()}"></option>
+            </select>
+            <p>Electric charge</p> <input name="electricCharge" th:field="*{electricCharge}" type="checkbox"/>
+            <button class="add" type="submit" value="Update">Update</button>
+        </form>
+    </section>
+</main>
 </body>
 </html>
