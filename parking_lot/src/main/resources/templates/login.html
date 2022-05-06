@@ -9,7 +9,7 @@
 </head>
 <body>
 <form>
-    <input id="username" type="text" placeholder="Username" required autofocus>
+    <input id="email" type="text" placeholder="Email" required autofocus>
     <input id="password" type="text" placeholder="Password" required>
 
     <div class="form_field">
@@ -20,17 +20,21 @@
 </html>
 <script rel="javascript" type='text/javascript'>
 
-    localStorage.getItem("token");
-
-
     function authenticate() {
-        var username = document.getElementById('username');
+        var username = document.getElementById('email');
         var password = document.getElementById('password');
         var url = "http://localhost:8080/authenticate?username="+username.value+"&password="+password.value;
         $.ajaxSetup({async: false});
         $.ajax({
             type: 'POST',
             url: url,
+            success: function (){
+                $.ajax({
+                    type: 'GET',
+                    url: "http://localhost:8080/tl_parking_lots",
+                    dataType: 'json'
+                });
+            },
             dataType: 'json'
         });
     }
