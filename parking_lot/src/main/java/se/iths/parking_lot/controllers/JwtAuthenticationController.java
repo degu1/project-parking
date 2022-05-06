@@ -1,24 +1,22 @@
 package se.iths.parking_lot.controllers;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import se.iths.parking_lot.config.JwtUtil;
 import se.iths.parking_lot.entities.User;
 import se.iths.parking_lot.model.AuthRequest;
 import se.iths.parking_lot.services.MyUserDetailsService;
 
-import javax.ws.rs.QueryParam;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 
-@RestController
+@Controller
 @CrossOrigin
 public class JwtAuthenticationController {
 
@@ -33,20 +31,22 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> createAuthToken(@QueryParam("username") String username, @QueryParam("password") String password) throws Exception {
+    public String createAuthToken(AuthRequest authRequest, HttpServletResponse response) throws Exception {
         AuthRequest authenticationRequest = new AuthRequest();
-        authenticationRequest.setUsername(username);
-        authenticationRequest.setPassword(password);
+        authenticationRequest.setUsername(authRequest.getUsername());
+        authenticationRequest.setPassword(authRequest.getPassword());
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final User user = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtUtil.generateToken(user);
-        ResponseCookie cookie = ResponseCookie.from("token", token)
-                .httpOnly(true)
-                .secure(true)
-                .maxAge(5000L)
-                .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+
+        Cookie cookie = new Cookie("token", token);
+        cookie.isHttpOnly();
+        cookie.setSecure(true);
+        cookie.setMaxAge(5000);
+        response.addCookie(cookie);
+
+        return "redirect:/tl_users/" + user.getId();
     }
 
     private void authenticate(String username, String password) throws Exception {
