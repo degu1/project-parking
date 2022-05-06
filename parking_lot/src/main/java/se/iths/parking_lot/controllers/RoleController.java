@@ -35,5 +35,6 @@ public class RoleController {
 
             }
         }
+        return "redirect:/tl_users/{userId}";
     }
 }
