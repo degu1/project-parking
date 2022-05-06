@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<form>
+    <input id="username" type="text" placeholder="Username" required autofocus>
+    <input id="password" type="text" placeholder="Password" required>
+
+    <div class="form_field">
+        <input type="submit" value="Sign In" onclick="authenticate()">
+    </div>
+</form>
+</body>
+</html>
+<script rel="javascript" type='text/javascript'>
+
+    localStorage.getItem("token");
+
+
+    function authenticate() {
+        var username = document.getElementById('username');
+        var password = document.getElementById('password');
+        var url = "http://localhost:8080/authenticate?username="+username.value+"&password="+password.value;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: 'POST',
+            url: url,
+            dataType: 'json'
+        });
+    }
+
+</script>
