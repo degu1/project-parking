@@ -5,6 +5,14 @@
     font-size: 14px;
 }
 
+html, body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #e7e7e7;
+    justify-content: space-between;
+}
+
 h1 {
     font-size: 40px;
 }
@@ -32,6 +40,8 @@ li {
     margin: 5px;
     padding: 5px;
     border: solid #acacac 1px;
+    border-radius: 5px;
+    background-color: white;
 }
 
 #parking-slot-list {
@@ -99,6 +109,8 @@ p {
 }
 
 .return {
+    margin: 10px;
+    display: inline-block;
     padding: 10px 15px;
     width: fit-content;
     color: white;
@@ -106,6 +118,36 @@ p {
     border-radius: 5px;
 }
 
+input {
+    padding: 5px 10px;
+    border: #acacac solid 1px;
+    border-radius: 5px;
+}
+
 button {
+    justify-self: center;
     border-style: none;
+    margin: 10px 100px;
+    grid-column-start: 2;
+}
+
+form {
+    width: auto;
+    display: grid;
+    grid-template-columns: 250px 250px 250px;
+    grid-template-rows: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+form p {
+    justify-self: right;
+    grid-column-start: 0;
+    grid-column-end: 2;
+}
+
+form #error-message {
+    grid-column-start: 2;
+    justify-self: center;
+    color: #e35959;
 }

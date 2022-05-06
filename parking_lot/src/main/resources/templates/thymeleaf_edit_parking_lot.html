@@ -8,18 +8,20 @@
 </head>
 <body>
 <main>
+
     <h1 th:text="${parkingLot.name()}"></h1>
+
     <form method="post" th:action="@{/tl_parking_lots/edit}" th:object="${parkingLot}">
-        <ul>
-            <li>
-                <td>Name</td>
-                <td hidden="hidden"><input name="id" readonly th:field="*{id}" type="text"/></td>
-                <td><input name="name" th:field="*{name}" type="text"/></td>
-            </li>
-        </ul>
-        <p th:if="${constrainException}">Constrain Exception</p>
-        <button class="add" type="submit">Update</button>
+
+        <p>Name: </p>
+        <input name="name" th:field="*{name}" type="text"/>
+        <input id="lot-name-input" name="id" readonly th:field="*{id}" hidden="hidden" type="text"/>
+        <p id="error-message" th:if="${constrainException}">Constrain Exception</p>
+
+        <button class="add" type="submit" name="teest">Update</button>
     </form>
+
 </main>
+<a class="return" th:href="@{/tl_parking_lots}">Back</a>
 </body>
 </html>
