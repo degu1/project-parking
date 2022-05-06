@@ -6,20 +6,23 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="${parkingSlot.name()}"></h1>
-<form method="post" th:action="@{/tl_parking_lots/{lotId}/slot/edit (lotId=${lotId})}" th:object="${parkingSlot}">
-    <table>
-        <tr>
-            <td hidden>Id<input name="id" readonly
-                                th:field="*{id}" type="text"/></td>
-            <td>Name<input name="name" th:field="*{name}"
-                           type="text"/></td>
-            <td>Electric charge<input name="electricCharge" th:field="*{electricCharge}"
-                                      type="checkbox"/></td>
-        </tr>
-    </table>
-    <p th:if="${constrainException}">Constrain Exception</p>
-    <input type="submit" value="Update"/>
-</form>
+<main>
+
+    <h1 th:text="${parkingSlot.name()}"></h1>
+
+    <form method="post" th:action="@{/tl_parking_lots/{lotId}/slot/edit (lotId=${lotId})}" th:object="${parkingSlot}">
+
+        <p id="error-message" th:if="${constrainException}">Constrain Exception</p>
+
+        <p hidden>Id<input name="id" readonly th:field="*{id}" type="text"/></p>
+        <p>Name</p> <input name="name" th:field="*{name}" type="text"/>
+        <p>Electric charge</p> <input name="electricCharge" th:field="*{electricCharge}" type="checkbox"/>
+
+        <button class="add" type="submit" value="Update">Update</button>
+
+    </form>
+
+</main>
+<a class="return" th:href="@{/tl_parking_lots/{id} (id = ${lotId})}">Back</a>
 </body>
 </html>

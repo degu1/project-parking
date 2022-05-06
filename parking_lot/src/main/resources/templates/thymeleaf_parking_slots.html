@@ -6,26 +6,36 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="${parkingLot.name()}"></h1>
-<ul>
-    <th:block th:each="parkingSlot: ${parkingLot.parkingSlots()}">
-        <li>
-            <p>
-                <span th:text="${parkingSlot.name}"></span>
-                <span th:text="${parkingSlot.electricCharge}  ? 'Charge':'No charge'"></span>
-                <span th:if="${parkingSlot.user != null}" th:text="${parkingSlot.user.name()}"></span>
-                <span th:unless="${parkingSlot.user != null}">No user</span>
-            </p>
-            <a th:href="@{/tl_parking_lots/{lotId}/slots/{slotId}/remove (lotId=${parkingLot.id()}, slotId=${parkingSlot.id()})}">REMOVE
-                USER</a>
-            <a th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/edit (slotId=${parkingSlot.id()}, lotId=${parkingLot.id()})}">EDIT
-                SLOT</a>
-            <a th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/delete (slotId=${parkingSlot.id()}, lotId=${parkingLot.id()})}">REMOVE
-                SLOT</a>
-        </li>
-    </th:block>
-</ul>
-<a th:href="@{/tl_parking_lots}">Tillbaka</a>
-<a th:href="@{/tl_parking_lots/{lotId}/slots/add (lotId=${parkingLot.id()})}">New slot</a>
+<main>
+
+    <h1 th:text="${parkingLot.name()}"></h1>
+
+    <ul>
+        <th:block th:each="parkingSlot: ${parkingLot.parkingSlots()}">
+            <li id="parking-slot-list">
+                <div class="title">
+                    <p>Slot name: <span th:text="${parkingSlot.name}"/></p>
+                    <p>Type: <span th:text="${parkingSlot.electricCharge}  ? 'Charge':'No charge'"/></p>
+                    <p th:if="${parkingSlot.user != null}">User: <span th:text="${parkingSlot.user.name()}"/></p>
+                    <p th:unless="${parkingSlot.user != null}">No user</p>
+                </div>
+                <section>
+                    <a class="edit"
+                       th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/edit (slotId=${parkingSlot.id()}, lotId=${parkingLot.id()})}">EDIT
+                        SLOT</a>
+                    <a class="delete"
+                       th:href="@{/tl_parking_lots/{lotId}/slots/{slotId}/remove (lotId=${parkingLot.id()}, slotId=${parkingSlot.id()})}">REMOVE
+                        USER</a>
+                    <a class="delete"
+                       th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/delete (slotId=${parkingSlot.id()}, lotId=${parkingLot.id()})}">DELETE SLOT</a>
+                </section>
+            </li>
+        </th:block>
+    </ul>
+
+    <a class="add" th:href="@{/tl_parking_lots/{lotId}/slots/add (lotId=${parkingLot.id()})}">New slot</a>
+
+</main>
+<a class="return" th:href="@{/tl_parking_lots}">Back</a>
 </body>
 </html>

@@ -6,27 +6,20 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="'Edit ' + ${user.getName()}"></h1>
-<form method="post" th:action="@{/tl_users/{userId}/edit/submit (userId=${user.getId()})}" th:object="${user}">
-    <table>
-        <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Email notification</td>
-        </tr>
-        <tr>
-            <td hidden><input name="id" readonly
-                              th:field="*{id}" type="text"/></td>
-            <td><input name="name" th:field="*{name}"
-                       type="text"/></td>
-            <td><input name="name" th:field="*{email}"
-                       type="text"/></td>
-            <td><input name="name" th:field="*{emailNotification}"
-                       type="checkbox"/></td>
-        </tr>
-    </table>
-    <p th:if="${constrainException}">Constrain Exception</p>
-    <input type="submit" value="Update"/>
-</form>
+<main>
+    <h1 th:text="'Edit ' + ${user.getName()}"></h1>
+    <form method="post" th:action="@{/tl_users/{userId}/edit/submit (userId=${user.getId()})}" th:object="${user}">
+
+        <p id="error-message" th:if="${constrainException}">Constrain Exception</p>
+
+        <input hidden name="id" readonly th:field="*{id}" type="text"/>
+        <p>Name</p> <input name="name" th:field="*{name}" type="text"/>
+        <p>Email</p> <input name="name" th:field="*{email}" type="text"/>
+        <p>Email notification</p> <input name="name" th:field="*{emailNotification}" type="checkbox"/>
+
+        <button class="add" type="submit" value="Update">Update</button>
+    </form>
+</main>
+<a class="return" th:href="@{/tl_users/{id} (id = ${userId})}">Back</a>
 </body>
 </html>
