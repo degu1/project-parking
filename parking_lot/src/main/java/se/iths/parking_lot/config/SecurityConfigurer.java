@@ -1,6 +1,5 @@
 package se.iths.parking_lot.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,6 +41,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authenticate")
                 .permitAll()
                 .antMatchers("/login")
+                .permitAll()
+                .antMatchers("/tl_users/create")
+                .permitAll()
+                .antMatchers("/css/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
