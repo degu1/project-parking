@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private List<ParkingSlot> parkingSlots = new ArrayList<>();
 
     @NotEmpty
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     @NotEmpty
@@ -88,7 +88,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        List<Role> roles = this.getRoles();
+        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>(roles.size());
+        for (Role role : roles) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.getType()));
+        }
+        return grantedAuthorities;
     }
 
     @Override

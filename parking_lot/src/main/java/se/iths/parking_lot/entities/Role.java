@@ -4,22 +4,21 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
-public class Role implements Serializable {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotEmpty
-    private Type type;
+    private String type;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "roles")
     private List<User> users = new ArrayList<>();
 
 }

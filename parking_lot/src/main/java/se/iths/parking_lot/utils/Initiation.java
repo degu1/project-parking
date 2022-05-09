@@ -32,25 +32,34 @@ public class Initiation {
 
     @PostConstruct
     public void init() {
-        if (roleService.getAll().isEmpty()) {
+        if (roleService.getAll().isEmpty() && userService.getAll().isEmpty()) {
             Role userRole = new Role();
-            userRole.setType(Type.USER);
+            userRole.setType("ROLE_USER");
             roleRepository.save(userRole);
             Role adminRole = new Role();
-            adminRole.setType(Type.ADMIN);
+            adminRole.setType("ROLE_ADMIN");
             roleRepository.save(adminRole);
-        }
-        if(userService.getAll().isEmpty()){
-            User user = new User("dennis@iths.se","$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
+            Role managerRole = new Role();
+            managerRole.setType("ROLE_MANAGER");
+            roleRepository.save(managerRole);
+
+            List<Role> roles = roleService.getAll();
+
+
+            User user = new User("dennis@iths.se", "$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
             user.setName("Dennis");
+            user.setRoles(roles);
             userService.create(user);
+
 
             User user1 = new User("jonas@iths.se", "$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
             user1.setName("Jonas");
+            user1.setRoles(List.of(managerRole));
             userService.create(user1);
 
-            user1.setName("Milad");
             User user2 = new User("milad@iths.se", "$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
+            user2.setName("Milad");
+            user2.setRoles(List.of(userRole));
             userService.create(user2);
         }
 
