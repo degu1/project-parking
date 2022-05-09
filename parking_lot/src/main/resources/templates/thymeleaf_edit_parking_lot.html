@@ -9,7 +9,7 @@
 <body>
 <main>
 
-    <h1 th:text="${parkingLot.name()}"></h1>
+    <h1 th:text="${parkingLot.getName()}"></h1>
 
     <form method="post" th:action="@{/tl_parking_lots/edit}" th:object="${parkingLot}">
 
