@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import se.iths.parking_lot.config.JwtUtil;
+import se.iths.parking_lot.dtos.AuthRequestDto;
 import se.iths.parking_lot.entities.User;
-import se.iths.parking_lot.model.AuthRequest;
 import se.iths.parking_lot.services.MyUserDetailsService;
 
 import javax.servlet.http.Cookie;
@@ -31,13 +31,10 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping(value = "/authenticate")
-    public String createAuthToken(AuthRequest authRequest, HttpServletResponse response) throws Exception {
-        AuthRequest authenticationRequest = new AuthRequest();
-        authenticationRequest.setUsername(authRequest.getUsername());
-        authenticationRequest.setPassword(authRequest.getPassword());
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+    public String createAuthToken(AuthRequestDto authRequestDto, HttpServletResponse response) throws Exception {
+        authenticate(authRequestDto.username(), authRequestDto.password());
         final User user = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(authRequestDto.username());
         final String token = jwtUtil.generateToken(user);
 
         Cookie cookie = new Cookie("token", token);
