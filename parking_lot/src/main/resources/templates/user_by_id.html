@@ -8,6 +8,8 @@
 <body>
 <main>
 
+    <a th:href="@{/logout}">Log out</a>
+
     <h1>User <span th:text="${user.name}"></span></h1>
 
     <h2>Information</h2>
@@ -78,3 +80,8 @@
 </main>
 </body>
 </html>
+<script>
+    function logout(){
+        document.cookie.trim();
+    }
+</script>
