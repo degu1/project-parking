@@ -42,13 +42,15 @@ public class Initiation {
         }
         if(userService.getAll().isEmpty()){
             User user = new User("dennis@iths.se","$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
-            User user1 = new User("jonas@iths.se", "$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
-            User user2 = new User("milad@iths.se", "$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
             user.setName("Dennis");
-            user1.setName("Jonas");
-            user1.setName("Milad");
             userService.create(user);
+
+            User user1 = new User("jonas@iths.se", "$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
+            user1.setName("Jonas");
             userService.create(user1);
+
+            user1.setName("Milad");
+            User user2 = new User("milad@iths.se", "$2a$12$rdQiDVu2ke.OABKJxdrDc.BbfdvyGbEncuL3YfPAQIn4gphKt7S9u", new ArrayList<>());
             userService.create(user2);
         }
 

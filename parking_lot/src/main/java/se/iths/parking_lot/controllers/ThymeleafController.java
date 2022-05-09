@@ -67,7 +67,7 @@ public class ThymeleafController {
     }
 
     @PostMapping("/edit")
-    public String submitEdit(@ModelAttribute ParkingLot parkingLot, Model model) throws ParkingLotNotFoundException {
+    public String submitEdit(@ModelAttribute ParkingLot parkingLot) throws ParkingLotNotFoundException {
         try {
             parkingLotService.updateWithPATCH(parkingLot);
         } catch (DataIntegrityViolationException e) {
@@ -84,7 +84,7 @@ public class ThymeleafController {
     }
 
     @GetMapping("/{lotId}/slots/{slotId}/remove")
-    public String removeSlots(@PathVariable("lotId") Long lotId, @PathVariable("slotId") Long slotId, Model model) throws ParkingSlotNotFoundException {
+    public String removeSlots(@PathVariable("lotId") Long lotId, @PathVariable("slotId") Long slotId) throws ParkingSlotNotFoundException {
         parkingSlotService.removeUserFromParkingSlot(slotId);
         return "redirect:/tl_parking_lots/{lotId}";
     }

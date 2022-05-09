@@ -41,6 +41,8 @@ public class User implements UserDetails {
     @NotEmpty
     @ManyToMany
     private List<Role> roles = new ArrayList<>();
+
+    @NotEmpty
     private String password;
 
     public User(String email, String password, ArrayList<Role> roles) {
