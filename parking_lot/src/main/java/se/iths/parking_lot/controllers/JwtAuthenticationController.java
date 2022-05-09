@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin
 public class JwtAuthenticationController {
 
-    private AuthenticationManager authenticationManager;
-    private JwtUtil jwtUtil;
-    private MyUserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final MyUserDetailsService userDetailsService;
 
     public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, MyUserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
@@ -32,18 +32,16 @@ public class JwtAuthenticationController {
 
     @PostMapping(value = "/authenticate")
     public String createAuthToken(AuthRequestDto authRequestDto, HttpServletResponse response) throws Exception {
-        authenticate(authRequestDto.username(), authRequestDto.password());
         final User user = userDetailsService
                 .loadUserByUsername(authRequestDto.username());
         final String token = jwtUtil.generateToken(user);
-
         Cookie cookie = new Cookie("token", token);
         cookie.isHttpOnly();
         cookie.setSecure(true);
-        cookie.setMaxAge(5000);
+        cookie.setMaxAge(10000000);
         response.addCookie(cookie);
-
-        return "redirect:/tl_users/" + user.getId();
+        authenticate(authRequestDto.username(), authRequestDto.password());
+        return "redirect:/redirect";
     }
 
     private void authenticate(String username, String password) throws Exception {

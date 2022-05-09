@@ -2,6 +2,7 @@ package se.iths.parking_lot.services;
 
 import org.springframework.stereotype.Service;
 import se.iths.parking_lot.JMS.sender.MessageSender;
+import se.iths.parking_lot.config.JwtUtil;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.entities.QueueSlot;
@@ -107,5 +108,11 @@ public class UserService implements CRUDService<User> {
         QueueSlot queueSlot = queueSlotRepository.findById(queueSlotId).orElseThrow(() -> new QueueSlotNotFoundException("Queue slot with id " + queueSlotId + " not found"));
 
         user.removeQueueSlot(queueSlot);
+    }
+
+    public User getUserByToken(String token) {
+        MyUserDetailsService userDetailsService = new MyUserDetailsService(userRepository);
+        JwtUtil jwtUtil = new JwtUtil();
+        return userDetailsService.loadUserByUsername(jwtUtil.extractUsername(token));
     }
 }
