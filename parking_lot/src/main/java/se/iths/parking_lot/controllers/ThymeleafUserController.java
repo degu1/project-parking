@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import se.iths.parking_lot.dtos.AddUserToQueueDto;
+import se.iths.parking_lot.dtos.UserDto;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.User;
 import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
@@ -56,7 +57,7 @@ public class ThymeleafUserController {
     @PostMapping("{userId}/queue")
     public String addUserToQueue(@PathVariable("userId") Long userId, @ModelAttribute AddUserToQueueDto addUserToQueueDto, Model model) throws UserNotFoundException, ParkingLotNotFoundException {
         model.addAttribute("dto", addUserToQueueDto);
-        userService.queryToParkingLot(userId, addUserToQueueDto.getParkingLotId(), addUserToQueueDto.getElectricCharge());
+        userService.queryToParkingLot(userId, addUserToQueueDto.parkingLotId(), addUserToQueueDto.electricCharge());
         return "redirect:/tl_users/{userId}";
     }
 
@@ -69,9 +70,9 @@ public class ThymeleafUserController {
     }
 
     @PostMapping("{userId}/edit/submit")
-    public String editSubmit(@ModelAttribute User user, @PathVariable("userId") Long userId) throws UserNotFoundException {
+    public String editSubmit(@ModelAttribute UserDto userDto, @PathVariable("userId") Long userId) throws UserNotFoundException {
         try {
-            userService.updateWithPATCH(user);
+            userService.updateWithPATCH(userDto.toUser());
         } catch (
                 DataIntegrityViolationException e) {
             return "redirect:/tl_users/{userId}/edit?constrainException=true";
@@ -87,9 +88,9 @@ public class ThymeleafUserController {
     }
 
     @PostMapping("create")
-    public String createUserSubmit(User user) {
+    public String createUserSubmit(UserDto userDto) {
         try {
-            userService.create(user);
+            userService.create(userDto.toUser());
         } catch (
                 DataIntegrityViolationException e) {
             return "redirect:/tl_users/create?constrainException=true";
