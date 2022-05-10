@@ -1,12 +1,10 @@
 package se.iths.parking_lot.services;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.iths.parking_lot.JMS.sender.MessageSender;
 import se.iths.parking_lot.config.JwtUtil;
-import se.iths.parking_lot.entities.ParkingLot;
-import se.iths.parking_lot.entities.ParkingSlot;
-import se.iths.parking_lot.entities.QueueSlot;
-import se.iths.parking_lot.entities.User;
+import se.iths.parking_lot.entities.*;
 import se.iths.parking_lot.exceptions.NoEmptyParkingSlotException;
 import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
 import se.iths.parking_lot.exceptions.QueueSlotNotFoundException;
@@ -23,12 +21,14 @@ import java.util.stream.StreamSupport;
 @Transactional
 public class UserService implements CRUDService<User> {
 
+    private final RoleService roleService;
     private final UserRepository userRepository;
     private final ParkingLotRepository parkingLotRepository;
     private final QueueSlotRepository queueSlotRepository;
     private final MessageSender messageSender;
 
-    public UserService(UserRepository userRepository, ParkingLotRepository parkingLotRepository, QueueSlotRepository queueSlotRepository, MessageSender messageSender) {
+    public UserService(RoleService roleService, UserRepository userRepository, ParkingLotRepository parkingLotRepository, QueueSlotRepository queueSlotRepository, MessageSender messageSender) {
+        this.roleService = roleService;
         this.userRepository = userRepository;
         this.parkingLotRepository = parkingLotRepository;
         this.queueSlotRepository = queueSlotRepository;
@@ -37,6 +37,10 @@ public class UserService implements CRUDService<User> {
 
     @Override
     public void create(User user) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Role role = roleService.findByRoleName("ROLE_USER");
+        user.setRoles(List.of(role));
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -48,13 +52,13 @@ public class UserService implements CRUDService<User> {
     @Override
     public void updateWithPATCH(User user) throws UserNotFoundException {
         User oldUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("User with id " + user.getId() + " not found."));
-        if (!user.getName().equals(null)) {
+        if (user.getName() != null) {
             oldUser.setName(user.getName());
         }
-        if (!user.getEmail().equals(null)) {
+        if (user.getEmail() != null) {
             oldUser.setEmail(user.getEmail());
         }
-        if (!user.getEmailNotification().equals(null)) {
+        if (user.getEmailNotification() != null) {
             oldUser.setEmailNotification(user.getEmailNotification());
         }
 

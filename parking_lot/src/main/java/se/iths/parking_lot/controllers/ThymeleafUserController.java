@@ -88,9 +88,9 @@ public class ThymeleafUserController {
     }
 
     @PostMapping("create")
-    public String createUserSubmit(UserDto userDto) {
+    public String createUserSubmit(User user) {
         try {
-            userService.create(userDto.toUser());
+            userService.create(user);
         } catch (
                 DataIntegrityViolationException e) {
             return "redirect:/tl_users/create?constrainException=true";

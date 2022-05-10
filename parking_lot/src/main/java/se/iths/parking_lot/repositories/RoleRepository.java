@@ -4,4 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import se.iths.parking_lot.entities.Role;
 
 public interface RoleRepository extends CrudRepository<Role, Long> {
+    Role findByType(String role_user);
 }
