@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Parking Lot</title>
@@ -8,13 +8,12 @@
 <body>
 <main>
 
-    <a th:href="@{/logout}">Log out</a>
-
     <h1>User <span th:text="${user.name}"></span></h1>
 
-    <h2>Information</h2>
-
     <section>
+
+        <h2>Information</h2>
+
         <article>
             <p th:text="${user.getEmail()}"></p>
             <p th:if="${user.getEmailNotification()}">Email notification is turn on</p>
@@ -23,9 +22,10 @@
         </article>
     </section>
 
-    <h2>My Queue</h2>
+    <section sec:authorize="hasRole('USER')">
 
-    <section>
+        <h2>My Queue</h2>
+
         <table>
             <tr>
                 <th>Parking lot</th>
@@ -44,9 +44,11 @@
         </table>
     </section>
 
-    <h2>My Parking</h2>
 
-    <section>
+    <section sec:authorize="hasRole('USER')">
+
+        <h2>My Parking</h2>
+
         <table>
 
             <th>Parking lot</th>
@@ -65,9 +67,10 @@
         </table>
     </section>
 
-    <h2>Get parking slot</h2>
+    <section sec:authorize="hasRole('USER')">
 
-    <section>
+        <h2>Get parking slot</h2>
+
         <form method="post" th:action="@{/tl_users/{userId}/queue (userId=${id})}" th:object="${addUserToQueueDto}">
             <p>Lot</p>
             <select th:field="*{parkingLotId}">
@@ -77,11 +80,13 @@
             <button class="add" type="submit" value="Update">Update</button>
         </form>
     </section>
+    <section sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+        <a class="return" th:href="@{/tl_parking_lots}">Go to admin page</a>
+    </section>
+
 </main>
+<a class="return" th:href="@{/logout}">Log out</a>
 </body>
 </html>
 <script>
-    function logout(){
-        document.cookie.trim();
-    }
 </script>

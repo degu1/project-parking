@@ -8,9 +8,10 @@
 <body>
 <main>
     <article id="error-container">
-        <h1 style="color: #e35959">Error</h1>
-        <p>Something went wrong!</p>
-        <p>You can try to go back to the home page by clicking here:</p>
+        <h1 style="color: #e35959" th:text="${status + ' ' + error}"/>
+        <p th:text="${timestamp}" />
+        <p th:text="${message}" />
+        <p th:text="${exception}" />
         <a class="return" th:href="@{/redirect}">Back</a>
     </article>
 </main>
