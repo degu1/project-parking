@@ -22,11 +22,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final MyUserDetailsService myUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final JwtAuthenticateHandler authenticateHandler;
 
-    public SecurityConfigurer(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, MyUserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfigurer(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, MyUserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter, JwtAuthenticateHandler authenticateHandler) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.myUserDetailsService = myUserDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.authenticateHandler = authenticateHandler;
     }
 
 
@@ -41,7 +43,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authenticate", "/login", "/tl_users/create", "/css/**", "/static/**")
                 .permitAll()
                 .antMatchers("/tl_parking_lots/add", "/tl_parking_lots/delete/**").hasRole("ADMIN")
-                .antMatchers("/tl_parking_lots", "/tl_parking_lots/").hasAnyRole("MANAGER", "ADMIN")
+                .antMatchers("/tl_parking_lots", "/tl_parking_lots/**").hasAnyRole("MANAGER", "ADMIN")
                 .antMatchers("/tl_parking_lots").hasAnyRole("MANAGER", "ADMIN")
                 .antMatchers("/tl_parking_lots/add").hasRole("ADMIN")
                 .antMatchers("/tl_users/{userId}/**").access("@webSecurity.checkUserId(authentication,#userId)")
@@ -57,6 +59,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(authenticateHandler)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);

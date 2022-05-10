@@ -14,7 +14,6 @@ import se.iths.parking_lot.services.UserService;
 @Controller
 public class LoginController {
 
-
     private final UserService userService;
 
     public LoginController(UserService userService) {

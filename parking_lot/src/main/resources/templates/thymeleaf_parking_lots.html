@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -15,11 +15,12 @@
             <li class="list_objects">
                 <a class="title" th:href="@{/tl_parking_lots/{id}(id=${parkingLot.getId()})}" th:text="${parkingLot.name}"></a>
                 <a class="edit" th:href="@{/tl_parking_lots/edit/{id}(id=${parkingLot.getId()})}">EDIT</a>
-                <a class="delete" th:href="@{/tl_parking_lots/delete/{id}(id=${parkingLot.getId()})}">DELETE</a>
+                <a class="delete" sec:authorize="hasRole('ADMIN')"
+                   th:href="@{/tl_parking_lots/delete/{id}(id=${parkingLot.getId()})}">DELETE</a>
             </li>
         </th:block>
     </ul>
-    <a class="add" th:href="@{/tl_parking_lots/add}">Add new parking lot</a>
+    <a class="add" sec:authorize="hasRole('ADMIN')" th:href="@{/tl_parking_lots/add}">Add new parking lot</a>
 </main>
 <a class="return" th:href="@{/redirect}">User page</a>
 </body>

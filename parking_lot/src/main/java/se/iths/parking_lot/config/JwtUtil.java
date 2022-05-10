@@ -3,9 +3,8 @@ package se.iths.parking_lot.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import se.iths.parking_lot.entities.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import se.iths.parking_lot.entities.User;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -16,7 +15,7 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private String SECRET_KEY = "secret";
-    public static final long JWT_TOKEN_VALIDITY = 20000;
+    public static final long JWT_TOKEN_VALIDITY = 3600000;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
