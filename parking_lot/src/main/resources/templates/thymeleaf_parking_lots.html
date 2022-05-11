@@ -13,15 +13,18 @@
     <ul class="list">
         <th:block th:each="parkingLot: ${parkingLots}">
             <li class="list_objects">
-                <a class="title" th:href="@{/tl_parking_lots/{id}(id=${parkingLot.getId()})}" th:text="${parkingLot.name}"></a>
-                <a class="edit" th:href="@{/tl_parking_lots/edit/{id}(id=${parkingLot.getId()})}">EDIT</a>
+                <a class="title" th:href="@{/tl_parking_lots/{id}(id=${parkingLot.getId()})}"
+                   th:text="${parkingLot.name}"></a>
+                <a class="edit" th:href="@{/tl_parking_lots/edit/{id}(id=${parkingLot.getId()})}">Change name</a>
+                <a class="edit" th:href="@{/tl_parking_lots/{id}(id=${parkingLot.getId()})}">Edit slot</a>
                 <a class="delete" sec:authorize="hasRole('ADMIN')"
-                   th:href="@{/tl_parking_lots/delete/{id}(id=${parkingLot.getId()})}">DELETE</a>
+                   th:href="@{/tl_parking_lots/delete/{id}(id=${parkingLot.getId()})}">Delete</a>
             </li>
         </th:block>
     </ul>
     <a class="add" sec:authorize="hasRole('ADMIN')" th:href="@{/tl_parking_lots/add}">Add new parking lot</a>
 </main>
 <a class="return" th:href="@{/redirect}">User page</a>
+<a class="logout" th:href="@{/logout}">Log out</a>
 </body>
 </html>

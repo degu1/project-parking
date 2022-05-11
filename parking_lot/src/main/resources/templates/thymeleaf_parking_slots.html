@@ -21,14 +21,14 @@
                 </div>
                 <section>
                     <a class="edit"
-                       th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/edit (slotId=${parkingSlot.getId()}, lotId=${parkingLot.getId()})}">EDIT
-                        SLOT</a>
+                       th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/edit (slotId=${parkingSlot.getId()}, lotId=${parkingLot.getId()})}">Change
+                        name</a>
                     <a class="delete"
-                       th:href="@{/tl_parking_lots/{lotId}/slots/{slotId}/remove (lotId=${parkingLot.getId()}, slotId=${parkingSlot.getId()})}">REMOVE
-                        USER</a>
+                       th:href="@{/tl_parking_lots/{lotId}/slots/{slotId}/remove (lotId=${parkingLot.getId()}, slotId=${parkingSlot.getId()})}">Remove
+                        user</a>
                     <a class="delete"
-                       th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/delete (slotId=${parkingSlot.getId()}, lotId=${parkingLot.getId()})}">DELETE
-                        SLOT</a>
+                       th:href="@{/tl_parking_lots/{lotId}/slot/{slotId}/delete (slotId=${parkingSlot.getId()}, lotId=${parkingLot.getId()})}">Delete
+                        slot</a>
                 </section>
             </li>
         </th:block>
@@ -38,5 +38,6 @@
 
 </main>
 <a class="return" th:href="@{/tl_parking_lots}">Back</a>
+<a class="logout" th:href="@{/logout}">Log out</a>
 </body>
 </html>

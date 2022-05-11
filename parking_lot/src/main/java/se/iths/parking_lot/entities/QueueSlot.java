@@ -33,6 +33,7 @@ public class QueueSlot implements Serializable {
 
     public Long getPlaceInQueue() {
         return queue.queueSlots.stream()
+                .filter(slot -> slot.getElectricCharge() == electricCharge)
                 .filter(slot -> slot.id <= id)
                 .count();
     }

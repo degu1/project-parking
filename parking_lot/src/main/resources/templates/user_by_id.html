@@ -18,7 +18,7 @@
             <p th:text="${user.getEmail()}"></p>
             <p th:if="${user.getEmailNotification()}">Email notification is turn on</p>
             <p th:unless="${user.getEmailNotification()}">Email notification is turn off</p>
-            <a class="return" th:href="@{/tl_users/{userId}/edit (userId=${user.getId()})}">Edit my info</a>
+            <a class="submit" th:href="@{/tl_users/{userId}/edit (userId=${user.getId()})}">Edit my info</a>
         </article>
     </section>
 
@@ -30,13 +30,14 @@
             <tr>
                 <th>Parking lot</th>
                 <th>Position</th>
+                <th>Charge</th>
                 <th>Remove</th>
             </tr>
             <th:block th:each="queueSlots:${user.getQueueSlots()}">
                 <tr>
                     <td th:text="${queueSlots.getQueue().getParkingLot().name}"></td>
                     <td th:text="${queueSlots.getPlaceInQueue()}"></td>
-                    <td hidden th:text="${queueSlots.getPlaceInQueue()}"></td>
+                    <td th:text="${queueSlots.getElectricCharge()}"></td>
                     <td><a class="delete"
                            th:href="@{/tl_users/{userId}/queueSlots/{slotId}/remove (userId=${user.id}, slotId=${queueSlots.id})}">REMOVE</a>
                     </td>
@@ -53,14 +54,16 @@
 
             <th>Parking lot</th>
             <th>Parking slot</th>
+            <th>Charge</th>
             <th>Remove</th>
 
             <th:block th:each="slot:${user.getParkingSlots()}">
                 <tr>
                     <td th:text="${slot.parkingLot.name}"></td>
                     <td th:text="${slot.name}"></td>
+                    <td th:text="${slot.getElectricCharge()}"></td>
                     <td><a class="delete"
-                       th:href="@{/tl_users/{userId}/parkingSlots/{slotId}/remove (userId=${user.id}, slotId=${slot.id})}">REMOVE</a>
+                           th:href="@{/tl_users/{userId}/parkingSlots/{slotId}/remove (userId=${user.id}, slotId=${slot.id})}">Remove</a>
                     </td>
                 </tr>
             </th:block>
@@ -77,15 +80,13 @@
                 <option th:each="park : ${parkingLots}" th:text="${park.getName()}" th:value="${park.getId()}"></option>
             </select>
             <p>Electric charge</p> <input name="electricCharge" th:field="*{electricCharge}" type="checkbox"/>
-            <button class="add" type="submit" value="Update">Update</button>
+            <button class="add" type="submit" value="Update">Confirm</button>
         </form>
-    </section>
-    <section sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-        <a class="return" th:href="@{/tl_parking_lots}">Go to admin page</a>
     </section>
 
 </main>
-<a class="return" th:href="@{/logout}">Log out</a>
+<a class="return" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" th:href="@{/tl_parking_lots}">Go to admin page</a>
+<a class="logout" th:href="@{/logout}">Log out</a>
 </body>
 </html>
 <script>
