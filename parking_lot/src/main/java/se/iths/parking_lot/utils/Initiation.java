@@ -64,11 +64,11 @@ public class Initiation {
             userService.create(user2);
 
             ParkingLot parkingLot = new ParkingLot();
-            parkingLot.setName("Avicii Arena parkeringen");
+            parkingLot.setName("Drottningsgatan 2, garage.");
             parkingLotService.create(parkingLot);
 
             ParkingLot parkingLot2 = new ParkingLot();
-            parkingLot2.setName("Mall of Scandinavia parkeringen");
+            parkingLot2.setName("Kungsgatan 8, garage");
             parkingLotService.create(parkingLot2);
 
             for (ParkingLot lot : parkingLotService.getAll()) {
