@@ -68,8 +68,18 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
         if (parkingSlot.getName() != null) {
             oldParkingSlot.setName(parkingSlot.getName());
         }
+
         if (parkingSlot.getElectricCharge() != null) {
             oldParkingSlot.setElectricCharge(parkingSlot.getElectricCharge());
+        }
+
+        if(oldParkingSlot.getUser() == null){
+            try {
+                QueueSlot queueSlot = oldParkingSlot.getParkingLot().getQueue().getFirstSlot(parkingSlot.getElectricCharge());
+                oldParkingSlot.setUser(queueSlot.getUser());
+                queueSlotRepository.delete(queueSlot);
+            } catch (QueueIsEmptyException ignored) {
+            }
         }
     }
 

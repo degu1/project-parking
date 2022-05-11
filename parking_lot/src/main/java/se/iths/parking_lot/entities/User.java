@@ -63,6 +63,10 @@ public class User implements UserDetails {
         roles.add(role);
     }
 
+    public void addParkingSlot(ParkingSlot parkingSlot){
+        parkingSlots.add(parkingSlot);
+    }
+
     public void removeQueueSlot(QueueSlot queueSlot) {
         this.getQueueSlots().remove(queueSlot);
     }
