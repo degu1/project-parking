@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import se.iths.parking_lot.utils.PasswordConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -45,6 +46,7 @@ public class User implements UserDetails {
     private List<Role> roles = new ArrayList<>();
 
     @NotEmpty
+    @Convert(converter = PasswordConverter.class)
     private String password;
 
     public User(String email, String password, ArrayList<Role> roles) {
