@@ -7,9 +7,9 @@
 
     This app is a private parking lot management system.
     1. As a User you can get a parking slot(with or without electric charge) in a parking lot if there are empty slots available.
-    If there is not any slots available you are automaticly put in the que.
+    If there is not any slots available you are automaticly put in the queue.
     2. As a Manager you can manage parking lots.(create or remove slot or change name of the lot)
-    3. As a Admin you can do everything that a manager can do and add create or remove hole lots, remove peaple from que.
+    3. As a Admin you can do everything that a manager can do and add create or remove hole lots, remove peaple from queue.
     
     Default user logins are at the bottom of the readme.
 
@@ -24,7 +24,7 @@
   </tr>
     <tr>
     <td>EMAIL_USERNAME</td>
-    <td>Your gmail address</td>
+    <td>Your <u>Gmail</u> address</td>
   </tr>
     </tr>
     <tr>
