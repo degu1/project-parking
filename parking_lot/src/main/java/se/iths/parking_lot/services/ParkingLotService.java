@@ -2,12 +2,9 @@ package se.iths.parking_lot.services;
 
 import org.springframework.stereotype.Service;
 import se.iths.parking_lot.entities.ParkingLot;
-import se.iths.parking_lot.entities.ParkingSlot;
 import se.iths.parking_lot.entities.Queue;
 import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
-import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
 import se.iths.parking_lot.repositories.ParkingLotRepository;
-import se.iths.parking_lot.repositories.ParkingSlotRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -18,11 +15,9 @@ import java.util.stream.StreamSupport;
 public class ParkingLotService implements CRUDService<ParkingLot> {
 
     private final ParkingLotRepository parkingLotRepository;
-    private final ParkingSlotRepository parkingSlotRepository;
 
-    public ParkingLotService(ParkingLotRepository parkingLotRepository, ParkingSlotRepository parkingSlotRepository) {
+    public ParkingLotService(ParkingLotRepository parkingLotRepository) {
         this.parkingLotRepository = parkingLotRepository;
-        this.parkingSlotRepository = parkingSlotRepository;
     }
 
     @Override
@@ -70,10 +65,4 @@ public class ParkingLotService implements CRUDService<ParkingLot> {
         parkingLotRepository.deleteById(id);
     }
 
-    public void removeParkingSlot(Long parkingLotId, Long parkingSlotId) throws ParkingLotNotFoundException, ParkingSlotNotFoundException {
-        ParkingSlot parkingSlot = parkingSlotRepository.findById(parkingSlotId).orElseThrow(() -> new ParkingSlotNotFoundException("Parking slot with id " + parkingSlotId + " not found"));
-        ParkingLot parkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + parkingLotId + " not found"));
-
-        parkingLot.removeParkingSlot(parkingSlot);
-    }
 }

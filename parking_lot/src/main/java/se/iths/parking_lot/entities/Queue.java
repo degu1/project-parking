@@ -25,13 +25,10 @@ public class Queue implements Serializable {
     ParkingLot parkingLot;
 
     // Method returns a boolean if added queue slot is first in queue.
-    public Boolean addSlotToQueue(QueueSlot queueSlot) {
+    public Boolean addSlotToQueue(QueueSlot queueSlot, Boolean electricCharge) {
         queueSlots.add(queueSlot);
         queueSlot.setQueue(this);
-        if (queueSlots.size() == 1) {
-            return true;
-        }
-        return false;
+        return queueSlots.stream().filter(slot -> slot.getElectricCharge() == electricCharge).count() == 1;
     }
 
     public void removeQueueSlot(QueueSlot queueSlot) {
@@ -40,13 +37,11 @@ public class Queue implements Serializable {
 
     public QueueSlot getFirstSlot(Boolean electricCharge) throws QueueIsEmptyException {
         return queueSlots.stream()
-                .filter(qSlot -> qSlot.getElectricCharge().equals(electricCharge))
-                .sorted((qSlot1, qSlot2) -> (int) (qSlot1.getId() - qSlot2.getId()))
-                .findFirst()
+                .filter(qSlot -> qSlot.getElectricCharge().equals(electricCharge)).min((qSlot1, qSlot2) -> (int) (qSlot1.getId() - qSlot2.getId()))
                 .orElseThrow(() -> new QueueIsEmptyException("No one in queue with matching criteria"));
     }
 
-    public Long getQueuePosition (QueueSlot queueSlot) {
+    public Long getQueuePosition(QueueSlot queueSlot) {
         return queueSlots.stream()
                 .filter(q -> q.getId() <= queueSlot.getId())
                 .count();

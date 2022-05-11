@@ -20,7 +20,7 @@ public class MessageSender {
 
     private final JmsTemplate jmsTemplate;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Gson gson;
+    private final Gson gson;
 
     public MessageSender(JmsTemplate jmsTemplate, GsonBuilder gson) {
         this.jmsTemplate = jmsTemplate;
@@ -59,7 +59,7 @@ public class MessageSender {
     }
 
     private List<MessageObject> convertParkingSlotToMessage(ParkingSlot parkingSlot) {
-        List<MessageObject> messageObjectList = List.of(new MessageObject(
+        return List.of(new MessageObject(
                 UUID.randomUUID(),
                 MessageTopic.IN_PARKING,
                 parkingSlot.getUser().getName(),
@@ -67,11 +67,10 @@ public class MessageSender {
                 parkingSlot.getParkingLot().getName(),
                 parkingSlot.getName(),
                 null));
-        return messageObjectList;
     }
 
     private List<MessageObject> convertQueueSlotToMessage(QueueSlot queueSlot) {
-        List<MessageObject> messageObjectList = List.of(new MessageObject(
+        return List.of(new MessageObject(
                 UUID.randomUUID(),
                 MessageTopic.IN_QUEUE,
                 queueSlot.getUser().getName(),
@@ -79,7 +78,6 @@ public class MessageSender {
                 queueSlot.getQueue().getParkingLot().getName(),
                 null,
                 queueSlot.getQueue().getQueuePosition(queueSlot)));
-        return messageObjectList;
     }
 
     private List<MessageObject> convertQueueToMessage(Queue queue) {

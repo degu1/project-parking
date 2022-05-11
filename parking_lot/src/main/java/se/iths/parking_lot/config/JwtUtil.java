@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "secret";
+    private final String SECRET_KEY = "secret";
     public static final long JWT_TOKEN_VALIDITY = 3600000;
 
     public String extractUsername(String token) {

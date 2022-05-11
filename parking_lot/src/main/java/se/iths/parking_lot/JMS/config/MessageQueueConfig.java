@@ -8,9 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
-import se.iths.parking_lot.entities.ParkingSlot;
 
-import javax.naming.Binding;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

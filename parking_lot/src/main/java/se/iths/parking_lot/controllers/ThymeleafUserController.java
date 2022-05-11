@@ -43,13 +43,13 @@ public class ThymeleafUserController {
     }
 
     @GetMapping("{userId}/queueSlots/{slotId}/remove")
-    public String removeQueueSlots(@PathVariable("userId") Long userId, @PathVariable("slotId") Long slotId, Model model) {
+    public String removeQueueSlots(@PathVariable("userId") Long userId, @PathVariable("slotId") Long slotId) {
         userService.removeQueueSlot(slotId);
         return "redirect:/tl_users/{userId}";
     }
 
     @GetMapping("{userId}/parkingSlots/{slotId}/remove")
-    public String removeParkingSlots(@PathVariable("userId") Long userId, @PathVariable("slotId") Long slotId, Model model) throws ParkingSlotNotFoundException {
+    public String removeParkingSlots(@PathVariable("userId") Long userId, @PathVariable("slotId") Long slotId) throws ParkingSlotNotFoundException {
         parkingSlotService.removeUserFromParkingSlot(slotId);
         return "redirect:/tl_users/{userId}";
     }

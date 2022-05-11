@@ -32,7 +32,7 @@ public class ThymeleafController {
     }
 
     @GetMapping("add")
-    public String add(ParkingLot parkingLot, @RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) {
+    public String add(@RequestParam(name = "constrainException", defaultValue = "false") Boolean constrainException, Model model) {
         model.addAttribute("parkingLot", new ParkingLot());
         model.addAttribute("constrainException", constrainException);
         return "thymeleaf_add_parking_lot";
@@ -105,7 +105,7 @@ public class ThymeleafController {
     }
 
     @PostMapping("{lotId}/slots/add")
-    public String addSubmit(@ModelAttribute ParkingSlotDto parkingSlotDto, @PathVariable("lotId") Long lotId, Model model) throws ParkingLotNotFoundException {
+    public String addSubmit(@ModelAttribute ParkingSlotDto parkingSlotDto, @PathVariable("lotId") Long lotId) throws ParkingLotNotFoundException {
         try {
             parkingSlotService.create(parkingSlotDto.toParkingSlot(), lotId);
         } catch (DataIntegrityViolationException e) {

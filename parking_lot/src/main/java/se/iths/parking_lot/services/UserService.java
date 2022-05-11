@@ -13,6 +13,7 @@ import se.iths.parking_lot.repositories.QueueSlotRepository;
 import se.iths.parking_lot.repositories.UserRepository;
 
 import javax.transaction.Transactional;
+import javax.xml.rpc.ServiceException;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -36,8 +37,10 @@ public class UserService implements CRUDService<User> {
 
     @Override
     public void create(User user) {
-        Role role = roleService.findByRoleName("ROLE_USER");
-        user.setRoles(List.of(role));
+        if(user.getRoles().isEmpty()) {
+            Role role = roleService.findByRoleName("ROLE_USER");
+            user.addRole(role);
+        }
         userRepository.save(user);
     }
 
@@ -86,7 +89,7 @@ public class UserService implements CRUDService<User> {
 
         QueueSlot queueSlot = queueSlotRepository.save(new QueueSlot(user, electricCharge));
 
-        Boolean isFirstInQueue = parkingLot.getQueue().addSlotToQueue(queueSlot);
+        Boolean isFirstInQueue = parkingLot.getQueue().addSlotToQueue(queueSlot, electricCharge);
 
         try {
             ParkingSlot parkingSlot = parkingLot.emptyParkingSlot(electricCharge);
@@ -102,13 +105,6 @@ public class UserService implements CRUDService<User> {
 
     public void removeQueueSlot(Long id) {
         queueSlotRepository.deleteById(id);
-    }
-
-    public void removeFromQueueSlot(Long userId, Long queueSlotId) throws UserNotFoundException, QueueSlotNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found."));
-        QueueSlot queueSlot = queueSlotRepository.findById(queueSlotId).orElseThrow(() -> new QueueSlotNotFoundException("Queue slot with id " + queueSlotId + " not found"));
-
-        user.removeQueueSlot(queueSlot);
     }
 
     public User getUserByToken(String token) {

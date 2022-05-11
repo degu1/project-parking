@@ -6,9 +6,7 @@ import se.iths.parking_lot.entities.User;
 
 @Component("webSecurity")
 public class WebSecurity {
-
     public boolean checkUserId(Authentication authentication, Long id) {
-
         try {
             User principal = (User) authentication.getPrincipal();
             return principal.getId().equals(id);

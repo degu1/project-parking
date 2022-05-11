@@ -41,6 +41,9 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
     public void create(ParkingSlot parkingSlot, Long parkingLotId) throws ParkingLotNotFoundException {
         ParkingLot foundParkingLot = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ParkingLotNotFoundException("Parking lot with id " + parkingLotId + " not found"));
         parkingSlot.setParkingLot(foundParkingLot);
+        if (parkingSlot.getElectricCharge() == null) {
+            parkingSlot.setElectricCharge(false);
+        }
         parkingSlotRepository.save(parkingSlot);
 
         Queue queue = parkingSlot.getParkingLot().getQueue();
@@ -49,8 +52,7 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
             QueueSlot queueSlot = queue.getFirstSlot(parkingSlot.getElectricCharge());
             parkingSlot.setUser(queueSlot.getUser());
             queueSlotRepository.delete(queueSlot);
-        } catch (QueueIsEmptyException e) {
-            System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");//TODO logg
+        } catch (QueueIsEmptyException ignored) {
         }
     }
 
@@ -107,8 +109,7 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
 
             messageSender.addedToParkingSlotMessage(parkingSlot);
             messageSender.sendQueueUpdateMessage(queue);
-        } catch (QueueIsEmptyException e) {
-            System.out.println("FINNS LEDIG PARKERINGS PLATS!!!");
+        } catch (QueueIsEmptyException ignored) {
         }
     }
 }
