@@ -13,8 +13,8 @@
         <p>Hej <span style="font-weight: bold" th:text="${messageObject.getUserName()}">!</span></p>
         <br>
         <div style="font-style: italic">
-            <p>Du har nu fått en ny plats i kön på <span th:text="${messageObject.getParkingLot()}">.</span></p>
-            <p>Din nya köplats är: <span th:text="${messageObject.getQueuePosition()}"></span></p>
+            <p>Kön är uppdaterad till <span th:text="${messageObject.getParkingLot()}">.</span></p>
+            <p>Din köplats är: <span th:text="${messageObject.getQueuePosition()}"></span></p>
         </div>
         <br>
         <p>Mvh</p>

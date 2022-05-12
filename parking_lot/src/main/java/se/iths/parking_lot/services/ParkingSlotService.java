@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import se.iths.parking_lot.JMS.sender.MessageSender;
 import se.iths.parking_lot.entities.ParkingLot;
 import se.iths.parking_lot.entities.ParkingSlot;
-import se.iths.parking_lot.entities.Queue;
 import se.iths.parking_lot.entities.QueueSlot;
 import se.iths.parking_lot.exceptions.ParkingLotNotFoundException;
 import se.iths.parking_lot.exceptions.ParkingSlotNotFoundException;
@@ -35,7 +34,7 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
 
     @Override
     public void create(ParkingSlot parkingSlot) {
-
+        //Not in use
     }
 
     public void create(ParkingSlot parkingSlot, Long parkingLotId) throws ParkingLotNotFoundException {
@@ -46,14 +45,7 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
         }
         parkingSlotRepository.save(parkingSlot);
 
-        Queue queue = parkingSlot.getParkingLot().getQueue();
-
-        try {
-            QueueSlot queueSlot = queue.getFirstSlot(parkingSlot.getElectricCharge());
-            parkingSlot.setUser(queueSlot.getUser());
-            queueSlotRepository.delete(queueSlot);
-        } catch (QueueIsEmptyException ignored) {
-        }
+        tryToAddNewUserTo(parkingSlot);
     }
 
     @Override
@@ -73,14 +65,7 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
             oldParkingSlot.setElectricCharge(parkingSlot.getElectricCharge());
         }
 
-        if(oldParkingSlot.getUser() == null){
-            try {
-                QueueSlot queueSlot = oldParkingSlot.getParkingLot().getQueue().getFirstSlot(parkingSlot.getElectricCharge());
-                oldParkingSlot.setUser(queueSlot.getUser());
-                queueSlotRepository.delete(queueSlot);
-            } catch (QueueIsEmptyException ignored) {
-            }
-        }
+        tryToAddNewUserTo(oldParkingSlot);
     }
 
     @Override
@@ -108,18 +93,21 @@ public class ParkingSlotService implements CRUDService<ParkingSlot> {
                 .findById(parkingSlotId)
                 .orElseThrow(() -> new ParkingSlotNotFoundException("Parking slot with id " + parkingSlotId + " not found"));
         parkingSlot.removeUser();
-        Queue queue = parkingSlot.getParkingLot().getQueue();
 
-        try {
-            QueueSlot queueSlot = queue.getFirstSlot(parkingSlot.getElectricCharge());
+        tryToAddNewUserTo(parkingSlot);
+    }
 
-            parkingSlot.setUser(queueSlot.getUser());
-            queue.removeQueueSlot(queueSlot);
-            queueSlotRepository.delete(queueSlot);
+    private void tryToAddNewUserTo(ParkingSlot parkingSlot) {
+        if (parkingSlot.getUser() == null) {
+            try {
+                QueueSlot queueSlot = parkingSlot.getParkingLot().getQueue().getFirstSlot(parkingSlot.getElectricCharge());
+                parkingSlot.setUser(queueSlot.getUser());
+                queueSlotRepository.delete(queueSlot);
 
-            messageSender.addedToParkingSlotMessage(parkingSlot);
-            messageSender.sendQueueUpdateMessage(queue);
-        } catch (QueueIsEmptyException ignored) {
+                messageSender.addedToParkingSlotMessage(parkingSlot);
+                messageSender.sendQueueUpdateMessage(parkingSlot.getParkingLot().getQueue());
+            } catch (QueueIsEmptyException ignored) {
+            }
         }
     }
 }
