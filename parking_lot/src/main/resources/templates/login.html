@@ -15,7 +15,7 @@
 
     <form method="post" th:action="@{/authenticate}" th:object="${authRequest}">
         <p>Email</p>
-        <input autofocus placeholder="Email" required th:field="*{username}" type="text"/>
+        <input autocomplete="on" autofocus placeholder="Email" required th:field="*{username}" type="email"/>
         <p>Password</p>
         <input placeholder="Password" required th:field="*{password}" type="password"/>
         <button class="add" type="submit" value="Sign In">Sign In</button>
