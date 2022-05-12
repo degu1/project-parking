@@ -7,6 +7,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import se.iths.parking_lot.entities.User;
+import se.iths.parking_lot.exceptions.NoCookieException;
 import se.iths.parking_lot.services.MyUserDetailsService;
 
 import javax.servlet.FilterChain;
@@ -15,6 +16,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -29,35 +31,34 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Cookie[] cookies = request.getCookies();
-        String jwt = null;
-        String username = null;
-
-
-        if (cookies != null && cookies.length > 1) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    jwt = cookie.getValue();
-                }
-            }
-        }
-
         try {
-            username = jwtUtil.extractUsername(jwt);
-        } catch (IllegalArgumentException | ExpiredJwtException ignored) {
-        }
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            String jwt = getJwt(request);
+            String username = jwtUtil.extractUsername(jwt);
             User user = this.userDetailsService.loadUserByUsername(username);
-            if (jwtUtil.validateToken(jwt, user)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        user, null, user.getAuthorities());
 
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            if (jwtUtil.doAuthenticationNotExist() && jwtUtil.isTokenNotExpired(jwt)) {
+                SecurityContextHolder.getContext().setAuthentication(userAuthenticationToken(request, user));
             }
+        } catch (NoCookieException | IllegalArgumentException | ExpiredJwtException ignored) {
+        } finally {
+            filterChain.doFilter(request, response);
         }
+    }
 
-        filterChain.doFilter(request, response);
+    private UsernamePasswordAuthenticationToken userAuthenticationToken(HttpServletRequest request, User user) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                user, null, user.getAuthorities());
+        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        return usernamePasswordAuthenticationToken;
+    }
+
+    private String getJwt(HttpServletRequest request) throws NoCookieException {
+        if (request.getCookies() == null) {
+            throw new NoCookieException();
+        }
+        return Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals("token"))
+                .map(Cookie::getValue)
+                .findFirst().orElseThrow(NoCookieException::new);
     }
 }

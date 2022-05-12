@@ -3,6 +3,7 @@ package se.iths.parking_lot.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import se.iths.parking_lot.entities.User;
 
@@ -38,6 +39,10 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
+    public Boolean isTokenNotExpired(String token) {
+        return extractExpiration(token).after(new Date());
+    }
+
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, user.getUsername());
@@ -52,5 +57,9 @@ public class JwtUtil {
     public Boolean validateToken(String token, User user) {
         final String username = extractUsername(token);
         return (username.equals(user.getUsername()) && !isTokenExpired(token));
+    }
+
+    public Boolean doAuthenticationNotExist() {
+        return SecurityContextHolder.getContext().getAuthentication() == null;
     }
 }
